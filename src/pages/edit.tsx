@@ -2,7 +2,7 @@ import { Suspense } from "solid-js";
 
 export default function Edit() {
   return (
-    <section class="bg-gray-100 text-gray-700 p-8">
+    <section class="container mx-auto flex flex-col">
       <h1>Edit</h1>
 
       <p>Should show units list</p>
