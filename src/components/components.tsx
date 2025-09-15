@@ -53,7 +53,7 @@ export const Units = (props: { playerId: PlayerId }) => {
       <Show when={props.playerId == 0}>
         <label class="block">
           <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
-          Reorient
+          Orient upside down
         </label>
       </Show>
 

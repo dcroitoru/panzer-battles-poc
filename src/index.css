@@ -89,7 +89,7 @@
 
 .units-container {
   display: inline-grid;
-  grid-template-columns: repeat(3, 120px);
+  grid-template-columns: repeat(5, 120px);
   gap: 32px;
 }
 

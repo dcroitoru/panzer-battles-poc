@@ -23,7 +23,7 @@ export default function Play() {
       </For> */}
 
       <Units playerId={0}></Units>
-      <hr class="my-4"></hr>
+      <hr class="h-4 bg-gray-600 my-4"></hr>
       <Units playerId={1}></Units>
     </section>
   );

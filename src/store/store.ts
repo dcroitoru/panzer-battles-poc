@@ -15,7 +15,7 @@ export const tickDelta = 0.25;
 
 let intId: number | undefined;
 let currentState: GameState;
-const maxTicks = 180;
+const maxTicks = 240;
 export const stop = () => {
   clearInterval(intId);
   setIsPlaying(false);
