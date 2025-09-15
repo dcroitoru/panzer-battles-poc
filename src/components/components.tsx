@@ -20,6 +20,8 @@ export const ReplaySpeed = () => (
 export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   const damaged = () => props.unit.hp < props.unit.base.hp;
+  const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
+
   return (
     <div class="unit" classList={{ dead: !props.unit.alive }}>
       <h3>
@@ -32,7 +34,7 @@ export const UnitView = (props: { unit: Unit }) => {
 
       <div class="unit-attack">{props.unit.attack}</div>
       <div class="unit-hp" classList={{ "unit-damaged": damaged() }}>
-        {props.unit.hp}
+        {hpStr()}
       </div>
 
       <div class="cooldown" style={{ transform: `scaleY(${cdNorm()})` }}></div>
