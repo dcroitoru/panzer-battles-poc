@@ -23,7 +23,7 @@ export const UnitView = (props: { unit: Unit }) => {
   const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
 
   return (
-    <div class="unit" classList={{ dead: !props.unit.alive }}>
+    <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }}>
       <h3>
         {props.unit.type} ({props.unit.id})
       </h3>

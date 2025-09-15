@@ -52,6 +52,9 @@
   width: 120px;
   height: 120px;
   position: relative;
+
+  background-size: cover;
+  filter: brightness(80%); /* makes it gray/darker */
 }
 
 .unit.dead {
@@ -111,17 +114,17 @@
 }
 
 .lightTank {
-  background-image: url("icons/tank.png");
+  background-image: url("assets/icons/tank.png");
 }
 .conscripts {
-  background-image: url("icons/luger.png");
+  background-image: url("assets/icons/luger.png");
 }
 .fieldMedics {
-  background-image: url("icons/nurse-male.png");
+  background-image: url("assets/icons/nurse-male.png");
 }
 .regulars {
-  background-image: url("icons/thompson-m1.png");
+  background-image: url("assets/icons/thompson-m1.png");
 }
 .snipers {
-  background-image: url("icons/headshot.png");
+  background-image: url("assets/icons/headshot.png");
 }
