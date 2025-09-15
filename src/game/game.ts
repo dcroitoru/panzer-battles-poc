@@ -71,9 +71,10 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   return { state: { ...state, tick }, event };
 };
 
-const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ? 1 : 0);
-const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
-const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
+export const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ? 1 : 0);
+export const playerUnits = (id: PlayerId) => (u: Unit) => u.ownerId === id;
+export const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
+export const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
 const acquireTarget = (unit: Unit, state: GameState): Unit => {
   return pickClosestEnemy(unit, state);
   // const playerId = getTargetPlayerId(unit);
