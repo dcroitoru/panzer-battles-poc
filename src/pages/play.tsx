@@ -9,9 +9,8 @@ export default function Play() {
       <p>Game state: {isPlaying() ? "Playing" : "Stopped"}</p>
       <ReplaySpeed></ReplaySpeed>
 
-      <Units></Units>
-
-      <Units></Units>
+      <Units playerId={0} units={[]}></Units>
+      <Units playerId={1} units={[]}></Units>
     </section>
   );
 }

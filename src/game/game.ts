@@ -1,0 +1,110 @@
+import { GameTickEvent } from "./types/events";
+import { GameState, PlayerId } from "./types/types";
+import { createUnit, createUnitId, Unit, UnitId, UnitType } from "./types/unit";
+import { pickRandom, sortByDistance } from "./util";
+
+export const tickDelta = 0.25;
+
+const aliveUnits = (state: GameState) => [...state.units.all.values().filter((u) => u.alive)];
+
+export const createTick = (state: GameState): { state: GameState; event: GameTickEvent } => {
+  if (state.gameplayState === "not-started")
+    return {
+      state: { ...state, gameplayState: "playing" },
+      event: { tick: state.tick, events: [{ type: "gameStart" }] },
+    };
+  const alive = aliveUnits(state);
+
+  // console.log("tick", state.tick, "alive", alive.length);
+
+  if (alive.length === 0)
+    return {
+      state: { ...state, gameplayState: "ended", outcome: "draw" },
+      event: { tick: state.tick, events: [{ type: "gameEnd" }] },
+    };
+
+  const p1alive = alive.filter((u) => u.ownerId === 0);
+  const p2alive = alive.filter((u) => u.ownerId === 1);
+  if (p1alive.length === 0)
+    return {
+      state: { ...state, gameplayState: "ended", outcome: { winner: 1 } },
+      event: { tick: state.tick, events: [{ type: "gameEnd" }] },
+    };
+
+  if (p2alive.length === 0)
+    return {
+      state: { ...state, gameplayState: "ended", outcome: { winner: 0 } },
+      event: { tick: state.tick, events: [{ type: "gameEnd" }] },
+    };
+
+  const tick = state.tick + 1;
+  const event: GameTickEvent = { tick, events: [] };
+  const activatedUnits: Unit[] = [];
+  alive.forEach((u) => {
+    u.cooldown -= tickDelta;
+    if (u.cooldown <= 0) {
+      u.cooldown = u.base.cooldown;
+      activatedUnits.push(u);
+    }
+  });
+
+  // trigger all attacks and activated abilities
+  activatedUnits.forEach((u) => {
+    // console.log("should activate unit", u.type, u.cooldown);
+
+    const target = acquireTarget(u, state);
+    // should apply status effects here
+    // attack
+    let attackValue = u.attack;
+    target.hp -= attackValue;
+    event.events.push({ type: "unitAttack", unitId: u.id, targetUnitId: target.id, damage: attackValue, remainingHp: target.hp });
+  });
+
+  // check for dead units
+  alive
+    .filter((u) => u.hp <= 0)
+    .forEach((u) => {
+      u.alive = false;
+      event.events.push({ type: "unitDie", unitId: u.id });
+    });
+
+  return { state: { ...state, tick }, event };
+};
+
+const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ? 1 : 0);
+const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
+const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
+const acquireTarget = (unit: Unit, state: GameState): Unit => {
+  return pickClosestEnemy(unit, state);
+  // const playerId = getTargetPlayerId(unit);
+  // const playerUnits = getPlayerUnits(playerId, state).filter((u) => u?.alive);
+  // const targetUnit = pickRandom(playerUnits);
+
+  // if (targetUnit === undefined) throw new Error("could not acquire unit!");
+
+  // return targetUnit;
+};
+
+export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
+  const p1 = u1.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 0, { x, y })));
+  const p2 = u2.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 1, { x, y })));
+  // const p2 = u2.map((t, i) => createUnit(createUnitId(), t, 1, { x: i, y: 0 }));
+  const all = new Map([...p1.flat(), ...p2.flat()].map((u) => [u.id, u]));
+  return {
+    gameplayState: "not-started",
+    tick: 0,
+    outcome: "no-outcome",
+    units: {
+      all,
+      0: p1.flat().map((u) => u.id),
+      1: p2.flat().map((u) => u.id),
+    },
+  };
+};
+
+export const pickClosestEnemy = (unit: Unit, state: GameState): Unit => {
+  const enemyUnits = getEnemyUnits(unit, state);
+  return enemyUnits.filter((u) => u.alive).sort(sortByDistance(unit))[0];
+};
+
+export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;

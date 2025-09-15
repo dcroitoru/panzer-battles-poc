@@ -1,6 +1,7 @@
 import { For, Show } from "solid-js";
-import { replaySpeedList, Unit } from "../game/types/types";
-import { isPlaying, play, setIsPlaying, setSpeed, speed, stop, units } from "../store/store";
+import { PlayerId, replaySpeedList } from "../game/types/types";
+import { isPlaying, play, setIsPlaying, setSpeed, speed, stop } from "../store/store";
+import { Unit } from "../game/types/unit";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -16,12 +17,14 @@ export const ReplaySpeed = () => (
 );
 
 export const UnitView = (props: { unit: Unit }) => {
-  const cdNorm = () => 1 - props.unit.cooldown / props.unit.baseCooldown;
+  const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   return (
     <div class="unit">
-      <h3>Unit {props.unit.id}</h3>
+      <h3>
+        {props.unit.type} ({props.unit.id})
+      </h3>
       <p>
-        cd: {props.unit.cooldown.toFixed(2)} ({props.unit.baseCooldown.toFixed(2)})
+        cd: {props.unit.cooldown.toFixed(2)} ({props.unit.base.cooldown.toFixed(2)})
       </p>
       {/* <p>cd norm {cdNorm()}</p> */}
 
@@ -30,12 +33,12 @@ export const UnitView = (props: { unit: Unit }) => {
   );
 };
 
-export const Units = () => (
+export const Units = (props: { playerId: PlayerId; units: Unit[] }) => (
   <div>
-    <h3>Units</h3>
+    <h3>Player {props.playerId} Units</h3>
 
     <div class="flex flex-row">
-      <For each={units}>{(u) => <UnitView unit={u}></UnitView>}</For>
+      <For each={props.units}>{(u) => <UnitView unit={u}></UnitView>}</For>
     </div>
   </div>
 );
