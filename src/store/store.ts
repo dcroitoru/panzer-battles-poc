@@ -1,6 +1,6 @@
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { GameState, ReplaySpeed } from "../game/types/types";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { createTick, getUnit } from "../game/game";
 import { initialState } from "./initial";
 import { playAnim } from "../anim/anim";
@@ -33,7 +33,6 @@ export const play = () => {
     let { state, event } = createTick(currentState);
     if (state.tick > maxTicks) stop();
     if (state.gameplayState === "ended") stop();
-    console.log(state);
     if (event.events.length > 0) console.log(event);
     currentState = state;
 
@@ -50,21 +49,3 @@ export const play = () => {
     event.events.forEach(playAnim);
   }, (tickDelta * 1000) / speed());
 };
-
-// createEffect(() => {
-//   if (speed()) stop();
-//   console.log("should start playing");
-
-//   play();
-// });
-
-// const initialGameState: GameState = {
-//   tick: 0,
-//   outcome: "no-outcome",
-//   gameplayState: "not-started",
-//   units: {
-//     all: new Map(initialState.map((u) => [u.id, u])),
-//     0: [0],
-//     1: [1],
-//   },
-// };
