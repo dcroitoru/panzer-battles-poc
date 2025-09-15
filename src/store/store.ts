@@ -1,9 +1,9 @@
 import { createStore, produce } from "solid-js/store";
 import { GameState, ReplaySpeed } from "../game/types/types";
 import { createEffect, createSignal } from "solid-js";
-import { createUnit, createUnitId, Unit, UnitType } from "../game/types/unit";
 import { createTick, getUnit } from "../game/game";
 import { initialState } from "./initial";
+import { playAnim } from "../anim/anim";
 
 const initialStoreState = [...initialState.units.all.values()];
 export const [units, setUnits] = createSignal(initialStoreState);
@@ -36,27 +36,7 @@ export const play = () => {
     console.log(state);
     if (event.events.length > 0) console.log(event);
     currentState = state;
-    // setStoreGameState(
-    //   "units",
-    //   "all",
-    //   produce((m) => {
-    //     state.units.all.forEach((u) => (m.get(u.id)!.cooldown = u.cooldown));
-    //   })
-    // );
-    // state.units.all.forEach((u, i) => {
-    //   setUnits(i, "cooldown", u.cooldown);
-    //   console.log(u.id, u.cooldown);
-    // });
-    // units.forEach((u, i) => {
-    //   const su = getUnit(u.id, state);
-    //   const cd = u.cooldown - tickDelta;
-    //   setUnits(i, "cooldown", su.cooldown);
-    //   setUnits(i, "alive", su.alive);
-    // });
 
-    // setUnits([...initialState.units.all.values()]);
-
-    // setStore(() => state);
     setUnits((prev) =>
       prev.map((u) => {
         const su = getUnit(u.id, state);
@@ -64,7 +44,8 @@ export const play = () => {
       })
     );
 
-    // setUnits(0, "cooldown")
+    // play animations
+    event.events.forEach(playAnim);
   }, (tickDelta * 1000) / speed());
 };
 

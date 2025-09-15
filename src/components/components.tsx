@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
 import { isPlaying, play, setIsPlaying, setSpeed, speed, stop, units } from "../store/store";
 import { Unit } from "../game/types/unit";
@@ -23,7 +23,7 @@ export const UnitView = (props: { unit: Unit }) => {
   const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
 
   return (
-    <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }}>
+    <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
       <h3>
         {props.unit.type} ({props.unit.id})
       </h3>
@@ -43,13 +43,21 @@ export const UnitView = (props: { unit: Unit }) => {
 };
 
 export const Units = (props: { playerId: PlayerId }) => {
-  const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
+  // const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
+  const unitsArr = () => units().filter(playerUnits(props.playerId));
+  const [reorient, setReorient] = createSignal(false);
 
   return (
     <div>
       <h3>Player {props.playerId} Units</h3>
+      <Show when={props.playerId == 0}>
+        <label class="block">
+          <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
+          Reorient
+        </label>
+      </Show>
 
-      <div class="units-container">
+      <div class="units-container" classList={{ flip: reorient() }}>
         <For each={unitsArr()}>{(u) => <UnitView unit={u}></UnitView>}</For>
       </div>
     </div>
