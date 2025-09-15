@@ -44,6 +44,8 @@ export const play = () => {
       })
     );
 
+    setStore(state);
+
     // play animations
     event.events.forEach(playAnim);
   }, (tickDelta * 1000) / speed());
