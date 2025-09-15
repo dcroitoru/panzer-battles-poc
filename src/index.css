@@ -50,6 +50,43 @@
   pointer-events: none;
 }
 
+.dummy {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.274);
+  width: 100px;
+  height: 100px;
+}
+
+.attack-anim {
+  width: 10px;
+  height: 50px;
+  background-color: black;
+
+  position: absolute;
+  pointer-events: all;
+  transform: rotateZ(90deg) translateY(-100px);
+  transform-origin: center;
+  /* animation: shoot 1s ease-in-out; */
+}
+
+/* .bullet {
+  position: absolute;
+  background-color: black;
+  height: 10px;
+  transform-origin: center;
+} */
+
+.bullet {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: black;
+  pointer-events: none;
+  box-shadow: 0px 10px 10px black;
+  /* transition: transform 0.4s linear, opacity 0.4s linear; */
+}
+
 .units-container {
   display: inline-grid;
   grid-template-columns: repeat(3, 120px);
@@ -59,11 +96,6 @@
 .flip {
   transform: scaleY(-1);
 }
-
-/* .rotate-180 {
-  transform: rotate(180deg);
-  display: inline-grid;
-} */
 
 .unit {
   border: 1px solid;
@@ -153,6 +185,8 @@
   font-weight: bold;
   color: red;
   animation: floatUp 1s ease-out forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
 }
 
 .damage-rect {
@@ -162,6 +196,8 @@
   width: 120px;
   height: 120px;
   inset: 0;
+  animation-delay: 0.5s;
+  opacity: 0;
 }
 
 /* Animations */
@@ -171,6 +207,7 @@
 
 .shake {
   animation: shake 0.1s ease-out;
+  animation-delay: 0.5s;
 }
 
 @keyframes recoil {
@@ -227,3 +264,9 @@
     transform: translateY(-50px); /* move up like a balloon */
   }
 }
+
+/* @keyframes shoot {
+  0% {
+    height: 0;
+  }
+} */

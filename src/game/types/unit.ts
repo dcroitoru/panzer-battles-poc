@@ -38,19 +38,19 @@ export const UnitBases: Record<UnitType, UnitBase> = {
     type: "regulars",
     attack: 3,
     hp: 12,
-    cooldown: 5,
+    cooldown: 4, //5
   },
   conscripts: {
     type: "conscripts",
     attack: 2,
     hp: 5,
-    cooldown: 5,
+    cooldown: 5, //5
   },
   lightTank: {
     type: "lightTank",
     attack: 3,
-    hp: 15,
-    cooldown: 6,
+    hp: 18, //15
+    cooldown: 9, //6
   },
   fieldMedics: {
     type: "fieldMedics",
