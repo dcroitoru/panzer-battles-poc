@@ -69,6 +69,7 @@ export const UnitBases: Record<UnitType, UnitBase> = {
 };
 
 let internalId = 0;
+export const resetUnitId = () => (internalId = 0);
 export const createUnitId = () => internalId++;
 export const createUnitVO = (type: UnitType): UnitVO => ({ id: createUnitId(), type });
 export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, position: Position): Unit => {

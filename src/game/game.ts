@@ -1,6 +1,6 @@
 import { GameTickEvent } from "./types/events";
 import { GameState, PlayerId } from "./types/types";
-import { createUnit, createUnitId, Unit, UnitId, UnitType } from "./types/unit";
+import { createUnit, createUnitId, resetUnitId, Unit, UnitId, UnitType } from "./types/unit";
 import { pickRandom, sortByDistance } from "./util";
 
 export const tickDelta = 0.25;
@@ -87,6 +87,7 @@ const acquireTarget = (unit: Unit, state: GameState): Unit => {
 };
 
 export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
+  resetUnitId();
   const p1 = u1.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 0, { x, y })));
   const p2 = u2.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 1, { x, y })));
   // const p2 = u2.map((t, i) => createUnit(createUnitId(), t, 1, { x: i, y: 0 }));

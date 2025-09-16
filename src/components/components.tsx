@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
-import { isPlaying, play, setIsPlaying, setSpeed, speed, stop, units } from "../store/store";
+import { isPlaying, onSpeedChange, play, setIsPlaying, setSpeed, speed, stop, units } from "../store/store";
 import { Unit } from "../game/types/unit";
 import { getPlayerUnits, getUnit, playerUnits } from "../game/game";
 
@@ -10,7 +10,7 @@ export const ReplaySpeed = () => (
     <For each={replaySpeedList}>
       {(sp) => (
         <label>
-          <input type="radio" name="replaySpeed" checked={sp === speed()} onChange={() => setSpeed(sp)}></input> {sp}
+          <input type="radio" name="replaySpeed" checked={sp === speed()} onChange={() => onSpeedChange(sp)}></input> {sp}
         </label>
       )}
     </For>
