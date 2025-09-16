@@ -25,20 +25,19 @@ export const UnitView = (props: { unit: Unit }) => {
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
-      <h3>
-        {props.unit.type} ({props.unit.id})
-      </h3>
-      <p>
-        cd: {props.unit.cooldown.toFixed(2)} ({props.unit.base.cooldown.toFixed(2)})
+      <div class="cooldown" style={{ transform: `scaleY(${cdNorm()})` }}></div>
+      <p class="font-bold text-md">
+        {props.unit.type} <span class="text-xs font-normal">({props.unit.id})</span>
       </p>
-      <p>alive: {props.unit.alive.toString()}</p>
+      <p class="text-xs">
+        🕒 {props.unit.cooldown.toFixed(2)} ({props.unit.base.cooldown.toFixed(2)})
+      </p>
+      {/* <p>alive: {props.unit.alive.toString()}</p> */}
 
       <div class="unit-attack">{props.unit.attack}</div>
       <div class="unit-hp" classList={{ "unit-damaged": damaged() }}>
         {hpStr()}
       </div>
-
-      <div class="cooldown" style={{ transform: `scaleY(${cdNorm()})` }}></div>
     </div>
   );
 };

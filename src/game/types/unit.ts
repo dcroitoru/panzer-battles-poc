@@ -1,9 +1,18 @@
 import { Abilities, Ability, Status } from "./ability";
+import { Armor, Blitz } from "./passives";
 import { PlayerId } from "./types";
 
 export type Position = { x: number; y: number };
-export const unitTypes = ["regulars", "conscripts", "lightTank", "fieldMedics", "snipers"] as const;
+export const unitTypes = ["regulars", "conscripts", "lightTank", "mediumTank", "fieldMedics", "snipers"] as const;
 export type UnitType = (typeof unitTypes)[number];
+export type PassiveType = "armor" | "multistrike" | "blitz" | "exposed" | "exalted";
+export type Passive = {
+  type: PassiveType;
+  kind: "buff" | "debuff";
+  value?: number;
+  consumable?: boolean;
+  mod?: "attack" | "defense";
+};
 
 export type UnitId = number;
 export type UnitBase = {
@@ -13,7 +22,7 @@ export type UnitBase = {
   hp: number;
   //   rarity: Rarity;
   //   tags: Tag[];
-  //   passives: Passive[];
+  passives?: Passive[];
   abilities?: Ability[];
 };
 
@@ -49,8 +58,16 @@ export const UnitBases: Record<UnitType, UnitBase> = {
   lightTank: {
     type: "lightTank",
     attack: 3,
-    hp: 18, //15
-    cooldown: 9, //6
+    hp: 15, //15
+    cooldown: 6, //6
+    passives: [Armor(1), Blitz()],
+  },
+  mediumTank: {
+    type: "mediumTank",
+    attack: 3,
+    hp: 20, //15
+    cooldown: 7, //6
+    passives: [Armor(2)],
   },
   fieldMedics: {
     type: "fieldMedics",
