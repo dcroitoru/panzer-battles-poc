@@ -188,6 +188,12 @@
 .lightTank {
   background-image: url("assets/icons/tank.png");
 }
+.mediumTank {
+  background-image: url("assets/icons/battle-tank.png");
+}
+.mobileAntitank {
+  background-image: url("assets/icons/jeep.png");
+}
 .conscripts {
   background-image: url("assets/icons/luger.png");
 }

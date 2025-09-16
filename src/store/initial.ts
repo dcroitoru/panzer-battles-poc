@@ -7,7 +7,7 @@ export const p1 = [
   ["regulars", "regulars", "conscripts", "lightTank", "conscripts"],
 ] as UnitType[][];
 export const p2 = [
-  ["lightTank", "mediumTank", "mobileAntitank", "lightTank", "lightTank"],
+  ["lightTank", "mediumTank", "mobileAntitank", "mediumTank", "lightTank"],
   ["conscripts", "lightTank", "lightTank", "lightTank", "lightTank"],
   ["conscripts", "lightTank", "lightTank", "lightTank", "lightTank"],
 ] as UnitType[][];

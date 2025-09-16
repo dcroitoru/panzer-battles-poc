@@ -8,7 +8,7 @@ const EditUnitView = (props: { unit: Unit; onChange: (unit: Unit, newType: UnitT
   return (
     <div class="unit">
       {/* <p>{props.unit.type}</p> */}
-      <select name="unitType" id="" onChange={(e) => props.onChange(props.unit, e.target.value as UnitType)}>
+      <select class="w-full" name="unitType" id="" onChange={(e) => props.onChange(props.unit, e.target.value as UnitType)}>
         <For each={unitTypes}>
           {(ut) => (
             <option value={ut} selected={ut === props.unit.type}>
@@ -30,12 +30,6 @@ const EditUnits = (props: { playerId: PlayerId }) => {
   return (
     <div>
       <h3>Player {props.playerId} Units</h3>
-      {/* <Show when={props.playerId == 0}>
-            <label class="block">
-              <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
-              Orient upside down
-            </label>
-          </Show> */}
 
       <div class="flex flex-row gap-4">
         <div class="units-container">
