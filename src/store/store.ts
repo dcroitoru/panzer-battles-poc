@@ -40,8 +40,8 @@ const processNextTick = () => {
   if (state.gameplayState === "ended") stop();
   if (event.events.length > 0) console.log(event);
   currentState = state;
-  event.events.forEach(playAnim);
   updateStoreState(state);
+  event.events.forEach(playAnim);
 };
 
 export const onSpeedChange = (sp: ReplaySpeed) => {
