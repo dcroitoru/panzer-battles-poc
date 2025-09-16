@@ -4,6 +4,7 @@ import { createSignal } from "solid-js";
 import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2 } from "./initial";
 import { playAnim } from "../anim/anim";
+import { Unit, UnitType } from "../game/types/unit";
 
 const initialStoreState = [...initialState.units.all.values()];
 export const [units, setUnits] = createSignal(initialStoreState);
@@ -15,7 +16,7 @@ export const tickDelta = 0.25;
 
 let intId: number;
 let currentState: GameState;
-const maxTicks = 240;
+export const maxTicks = 300;
 export const stop = () => {
   clearInterval(intId);
   setIsPlaying(false);
@@ -49,4 +50,11 @@ export const onSpeedChange = (sp: ReplaySpeed) => {
   if (isPlaying() === false) return;
   clearInterval(intId);
   intId = setInterval(processNextTick, (tickDelta * 1000) / speed());
+};
+
+export const onInitialStateChange = (unit: Unit, newType: UnitType) => {
+  let arr = unit.ownerId === 0 ? p1 : p2;
+  const { x, y } = unit.position;
+  arr[y][x] = newType;
+  updateStoreState(createInitialState(p1, p2));
 };

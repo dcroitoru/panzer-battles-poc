@@ -1,6 +1,6 @@
 import { For } from "solid-js";
 import { PlayStopBtn, ReplaySpeed, Units } from "../components/components";
-import { isPlaying, store } from "../store/store";
+import { isPlaying, maxTicks, store } from "../store/store";
 
 export default function Play() {
   return (
@@ -10,20 +10,14 @@ export default function Play() {
       <p>Game state: {isPlaying() ? "Playing" : "Stopped"}</p>
       <ReplaySpeed></ReplaySpeed>
 
-      <div>{store.tick}</div>
+      <div>
+        Tick: {store.tick} (max {maxTicks})
+      </div>
       <div>{store.gameplayState}</div>
       <div>{JSON.stringify(store.outcome)}</div>
 
-      {/* <For each={[...store.units.all.values()]}>
-        {(u) => (
-          <div class="unit">
-            {u.id}: {u.cooldown}
-          </div>
-        )}
-      </For> */}
-
       <Units playerId={0}></Units>
-      <hr class="h-4 bg-gray-600 my-4"></hr>
+      <hr class="h-4 my-4 bg-gray-600"></hr>
       <Units playerId={1}></Units>
     </section>
   );
