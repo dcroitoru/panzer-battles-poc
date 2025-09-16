@@ -1,11 +1,10 @@
 import { Abilities, Ability, Status } from "./ability";
-import { Armor, Blitz } from "./passives";
+import { Armor, ArmorPen, Blitz } from "./passives";
 import { PlayerId } from "./types";
 
 export type Position = { x: number; y: number };
-export const unitTypes = ["regulars", "conscripts", "lightTank", "mediumTank", "fieldMedics", "snipers"] as const;
-export type UnitType = (typeof unitTypes)[number];
-export type PassiveType = "armor" | "multistrike" | "blitz" | "exposed" | "exalted";
+
+export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted";
 export type Passive = {
   type: PassiveType;
   kind: "buff" | "debuff";
@@ -40,8 +39,10 @@ export type Unit = UnitVO & {
   alive: boolean;
   status: Set<Status>;
   position: { x: number; y: number };
+  passives: Passive[];
 };
-
+export const unitTypes = ["regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers"] as const;
+export type UnitType = (typeof unitTypes)[number];
 export const UnitBases: Record<UnitType, UnitBase> = {
   regulars: {
     type: "regulars",
@@ -65,9 +66,16 @@ export const UnitBases: Record<UnitType, UnitBase> = {
   mediumTank: {
     type: "mediumTank",
     attack: 3,
-    hp: 20, //15
-    cooldown: 7, //6
+    hp: 20,
+    cooldown: 7,
     passives: [Armor(2)],
+  },
+  mobileAntitank: {
+    type: "mobileAntitank",
+    attack: 4,
+    hp: 15,
+    cooldown: 7,
+    passives: [Armor(1), ArmorPen(4)],
   },
   fieldMedics: {
     type: "fieldMedics",
@@ -102,5 +110,6 @@ export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, positi
     cooldown: base.cooldown,
     status: new Set<Status>(),
     position,
+    passives: base.passives || [],
   };
 };

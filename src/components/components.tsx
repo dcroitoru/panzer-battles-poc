@@ -1,9 +1,10 @@
 import { createSignal, For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
 import { events, isPlaying, onSpeedChange, play, speed, stop, store, tickDelta, units } from "../store/store";
-import { Unit } from "../game/types/unit";
+import { Passive, Unit } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
+import { Exposed } from "../game/types/passives";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -22,17 +23,41 @@ export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   const damaged = () => props.unit.hp < props.unit.base.hp;
   const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
+  const buffs = () => props.unit.passives.filter((p) => p.kind === "buff");
+  const debuffs = (): Passive[] => [];
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
       <div class="cooldown" style={{ transform: `scaleY(${cdNorm()})` }}></div>
-      <p class="font-bold text-md">
+      <p class="font-bold text-md -mt-2 whitespace-nowrap">
         {props.unit.type} <span class="text-xs font-normal">({props.unit.id})</span>
       </p>
       <p class="text-xs">
         🕒 {props.unit.cooldown.toFixed(2)} ({props.unit.base.cooldown.toFixed(2)})
       </p>
       {/* <p>alive: {props.unit.alive.toString()}</p> */}
+
+      <div class="flex flex-col text-xs">
+        <div class="buffs">
+          <For each={buffs()}>
+            {(b) => (
+              <p class="text-green-800">
+                ▲ {b.type} {b.value ? b.value : ""}
+              </p>
+            )}
+          </For>
+        </div>
+
+        <div class="debuffs">
+          <For each={debuffs()}>
+            {(b) => (
+              <p class="text-red-800">
+                ▼ {b.type} {b.value ? b.value : ""}
+              </p>
+            )}
+          </For>
+        </div>
+      </div>
 
       <div class="unit-attack">{props.unit.attack}</div>
       <div class="unit-hp" classList={{ "unit-damaged": damaged() }}>

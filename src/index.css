@@ -102,13 +102,26 @@
   width: 120px;
   height: 120px;
   position: relative;
+  padding: 4px;
 
   background-size: cover;
-  filter: brightness(80%); /* makes it gray/darker */
+  filter: brightness(80%);
 }
 
 .unit.dead {
   background-color: #f3a5a5;
+}
+
+.unit .unit-title {
+  position: absolute;
+  border: 1px solid;
+  background-color: white;
+  font-weight: bold;
+  top: -20px;
+  left: 4px;
+  filter: brightness(100%);
+  /* transform: translate(50%, 0);
+  transform-origin: bottom; */
 }
 
 .unit .cooldown {

@@ -1,6 +1,7 @@
 import { Passive } from "./unit";
 
 export const Armor = (value: number): Passive => ({ type: "armor", value, kind: "buff", mod: "defense" });
+export const ArmorPen = (value: number): Passive => ({ type: "armor-pen", value, kind: "buff", mod: "attack" });
 
 export const Multistrike = (value: number): Passive => ({ type: "multistrike", value, kind: "buff", mod: "attack" });
 
