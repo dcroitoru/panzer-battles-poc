@@ -9,7 +9,7 @@ export const pickRandom = <T>(arr: T[]): T | undefined => {
 
 const det = (a: Position, b: Position) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
 export const sortByDistance = (p: Unit) => (a: Unit, b: Unit) => {
-  const da = det(a.position, { x: p.position.x, y: -1 });
-  const db = det(b.position, { x: p.position.x, y: -1 });
+  const da = det(a.position, { x: 4 - p.position.x, y: -1 });
+  const db = det(b.position, { x: 4 - p.position.x, y: -1 });
   return da - db;
 };

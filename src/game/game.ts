@@ -75,16 +75,17 @@ export const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ?
 export const playerUnits = (id: PlayerId) => (u: Unit) => u.ownerId === id;
 export const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
 export const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
+
 const acquireTarget = (unit: Unit, state: GameState): Unit => {
   return pickClosestEnemy(unit, state);
-  // const playerId = getTargetPlayerId(unit);
-  // const playerUnits = getPlayerUnits(playerId, state).filter((u) => u?.alive);
-  // const targetUnit = pickRandom(playerUnits);
-
-  // if (targetUnit === undefined) throw new Error("could not acquire unit!");
-
-  // return targetUnit;
 };
+
+const pickClosestEnemy = (unit: Unit, state: GameState): Unit => {
+  const enemyUnits = getEnemyUnits(unit, state);
+  return enemyUnits.filter((u) => u.alive).sort(sortByDistance(unit))[0];
+};
+
+export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;
 
 export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
   resetUnitId();
@@ -103,10 +104,3 @@ export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameStat
     },
   };
 };
-
-export const pickClosestEnemy = (unit: Unit, state: GameState): Unit => {
-  const enemyUnits = getEnemyUnits(unit, state);
-  return enemyUnits.filter((u) => u.alive).sort(sortByDistance(unit))[0];
-};
-
-export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;

@@ -43,22 +43,23 @@ export const UnitView = (props: { unit: Unit }) => {
 };
 
 export const Units = (props: { playerId: PlayerId }) => {
-  // const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
-  const unitsArr = () => units().filter(playerUnits(props.playerId));
-  const [reorient, setReorient] = createSignal(false);
+  const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
+  // const unitsArr = () => units().filter(playerUnits(props.playerId));
+  // const [reorient, setReorient] = createSignal(false);
+  const reorient = () => props.playerId === 0;
 
   return (
     <div>
       <h3>Player {props.playerId} Units</h3>
-      <Show when={props.playerId == 0}>
+      {/* <Show when={props.playerId == 0}>
         <label class="block">
           <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
           Orient upside down
         </label>
-      </Show>
+      </Show> */}
 
       <div class="flex flex-row gap-4">
-        <div class="units-container" classList={{ flip: reorient() }}>
+        <div class="units-container">
           <For each={unitsArr()}>{(u) => <UnitView unit={u}></UnitView>}</For>
         </div>
 
