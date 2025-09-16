@@ -209,6 +209,14 @@
   animation: shake 0.15s ease-out;
 }
 
+.color-0 {
+  color: magenta;
+}
+
+.color-1 {
+  color: rgb(65, 124, 252);
+}
+
 @keyframes recoil {
   0% {
     transform: translateY(0);

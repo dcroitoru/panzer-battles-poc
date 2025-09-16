@@ -1,8 +1,9 @@
 import { createSignal, For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
-import { isPlaying, onSpeedChange, play, speed, stop, units } from "../store/store";
+import { events, isPlaying, onSpeedChange, play, speed, stop, store, tickDelta, units } from "../store/store";
 import { Unit } from "../game/types/unit";
 import { playerUnits } from "../game/game";
+import { printHtmlEvent } from "../game/printEvents";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -88,3 +89,21 @@ export const PlayStopBtn = () => (
     </Show>
   </div>
 );
+
+export const ReplayEvents = () => {
+  return (
+    <div>
+      <h1>Events</h1>
+      <For each={events().filter((e) => e.events.length > 0)}>
+        {(e) => (
+          <div class="mt-4">
+            <p class="text-gray-500 text-sm">
+              Tick: {e.tick} ({e.tick * tickDelta}s)
+            </p>
+            <For each={e.events}>{(ev) => <p innerHTML={printHtmlEvent(ev, store)}></p>}</For>
+          </div>
+        )}
+      </For>
+    </div>
+  );
+};

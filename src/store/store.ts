@@ -5,9 +5,12 @@ import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2 } from "./initial";
 import { playAnim } from "../anim/anim";
 import { Unit, UnitType } from "../game/types/unit";
+import { GameTickEvent } from "../game/types/events";
 
 const initialStoreState = [...initialState.units.all.values()];
 export const [units, setUnits] = createSignal(initialStoreState);
+export const [events, setEvents] = createSignal<GameTickEvent[]>([]);
+
 export const [store, setStore] = createStore(initialState);
 export const [speed, setSpeed] = createSignal<ReplaySpeed>(2);
 export const [isPlaying, setIsPlaying] = createSignal(false);
@@ -22,11 +25,13 @@ export const stop = () => {
   setIsPlaying(false);
   currentState = createInitialState(p1, p2);
   updateStoreState(currentState);
+  // setEvents([]);
 };
 export const play = () => {
   setIsPlaying(true);
   currentState = createInitialState(p1, p2);
   updateStoreState(currentState);
+  setEvents([]);
   intId = setInterval(processNextTick, (tickDelta * 1000) / speed());
 };
 
@@ -42,6 +47,7 @@ const processNextTick = () => {
   if (event.events.length > 0) console.log(event);
   currentState = state;
   updateStoreState(state);
+  setEvents((prev) => [...prev, event]);
   event.events.forEach(playAnim);
 };
 

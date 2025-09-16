@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { PlayStopBtn, ReplaySpeed, Units } from "../components/components";
+import { PlayStopBtn, ReplayEvents, ReplaySpeed, Units } from "../components/components";
 import { isPlaying, maxTicks, store } from "../store/store";
 
 export default function Play() {
@@ -19,6 +19,8 @@ export default function Play() {
       <Units playerId={0}></Units>
       <hr class="h-4 my-4 bg-gray-600"></hr>
       <Units playerId={1}></Units>
+
+      <ReplayEvents></ReplayEvents>
     </section>
   );
 }
