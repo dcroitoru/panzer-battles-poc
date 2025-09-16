@@ -1,8 +1,8 @@
 import { createSignal, For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
-import { isPlaying, onSpeedChange, play, setIsPlaying, setSpeed, speed, stop, units } from "../store/store";
+import { isPlaying, onSpeedChange, play, speed, stop, units } from "../store/store";
 import { Unit } from "../game/types/unit";
-import { getPlayerUnits, getUnit, playerUnits } from "../game/game";
+import { playerUnits } from "../game/game";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -57,8 +57,16 @@ export const Units = (props: { playerId: PlayerId }) => {
         </label>
       </Show>
 
-      <div class="units-container" classList={{ flip: reorient() }}>
-        <For each={unitsArr()}>{(u) => <UnitView unit={u}></UnitView>}</For>
+      <div class="flex flex-row gap-4">
+        <div class="units-container" classList={{ flip: reorient() }}>
+          <For each={unitsArr()}>{(u) => <UnitView unit={u}></UnitView>}</For>
+        </div>
+
+        <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
+          <div class="h-[120px] grid items-center font-bold">Front</div>
+          <div class="h-[120px] grid items-center font-bold">Support</div>
+          <div class="h-[120px] grid items-center font-bold">Back</div>
+        </div>
       </div>
     </div>
   );
