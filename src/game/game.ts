@@ -142,13 +142,16 @@ const useAbility = (ability: Ability, source: Unit, target: Unit, state: GameSta
       };
     case "heal":
       // console.log(source.id, "should heal adjacent units");
+      const targets = getAdjacent(source, state);
+      const healValue = ability.value;
+      targets.forEach((t) => (t.hp = Math.min(t.hp + healValue, t.base.hp)));
       return {
         type: "unitUseAbility",
         ability,
         unitId: source.id,
         source: source.id,
         targetUnitId: source.id,
-        targets: getAdjacent(source, state).map((u) => u.id),
+        targets: targets.map((u) => u.id),
       };
 
     default:
