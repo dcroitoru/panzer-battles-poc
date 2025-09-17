@@ -1,4 +1,4 @@
-import { GameEvent } from "../game/types/events";
+import { GameEvent, GameTickEvent } from "../game/types/events";
 import { Unit, UnitId } from "../game/types/unit";
 
 export const bulletAnimDuration = 0.5;
@@ -130,51 +130,17 @@ export const playHealAnim = (unitId: UnitId, value: number) => {
   }, 1000);
 };
 
-// const playBulletAnim = (from: UnitId, to: UnitId) => {
-//   const elfrom = document.querySelector<HTMLElement>(`#unit-${from}`);
-//   const elto = document.querySelector<HTMLElement>(`#unit-${to}`);
-//   if (!elfrom || !elto) return;
+export const playSounds = (event: GameTickEvent) => {
+  // Shot sound
+  if (event.events.findIndex((ge) => ge.type === "unitAttack") !== -1) {
+    playShotSound();
+  }
+};
 
-//   const rectfrom = elfrom.getBoundingClientRect();
-//   const rectto = elto.getBoundingClientRect();
-//   const layer = document.querySelector<HTMLElement>("#animations-layer")!;
-
-//   const dx = rectto.x - rectfrom.x;
-//   const dy = rectto.y - rectfrom.y;
-//   const length = Math.sqrt(dx * dx + dy * dy);
-//   const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-//   const bullet = document.createElement("div");
-//   bullet.classList = "bullet";
-//   bullet.style.top = `${rectfrom.y}px`;
-//   bullet.style.left = `${rectfrom.x}px`;
-//   bullet.style.width = `${length}px`;
-//   bullet.style.transform = `rotate(${angle}deg)`;
-
-//   layer.append(bullet);
-//   setTimeout(() => {
-//     // dmgEl.remove();
-//     // dmgRectEl.remove();
-//   }, 1000);
-// };
-
-// function BulletTrail({ from, to }) {
-//   const dx = to.x - from.x;
-//   const dy = to.y - from.y;
-//   const length = Math.sqrt(dx*dx + dy*dy);
-//   const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-//   return (
-//     <div
-//       style={{
-//         position: "absolute",
-//         left: `${from.x}px`,
-//         top: `${from.y}px`,
-//         width: `${length}px`,
-//         height: "10px",
-//         background: "yellow",
-//         transformOrigin: "0 50%", // rotate around the start
-//         transform: `rotate(${angle}deg)`,
-//       }}
-//     />
-//   );
-// }
+export const playShotSound = () => {
+  const rnd = 1 + Math.round(Math.random());
+  // const src = rnd > 0.5 ? 1 : 2;
+  const audio = new Audio(`src/assets/audio/shot-${rnd}.mp3`);
+  audio.volume = 0.15;
+  audio.play();
+};

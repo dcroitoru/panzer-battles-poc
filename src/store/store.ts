@@ -3,7 +3,7 @@ import { GameState, ReplaySpeed } from "../game/types/types";
 import { createSignal } from "solid-js";
 import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2 } from "./initial";
-import { playAnim } from "../anim/anim";
+import { playAnim, playSounds } from "../anim/anim";
 import { Unit, UnitType } from "../game/types/unit";
 import { GameTickEvent } from "../game/types/events";
 
@@ -49,6 +49,8 @@ const processNextTick = () => {
   updateStoreState(state);
   setEvents((prev) => [...prev, event]);
   event.events.forEach(playAnim);
+  playSounds(event);
+  // if(event.events.findIndex(ge => ge.type === "unitAttack"))
 };
 
 export const onSpeedChange = (sp: ReplaySpeed) => {
