@@ -228,6 +228,25 @@
   opacity: 0;
 }
 
+.heal-text {
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+  animation: floatUp-heal 1.2s ease-in-out forwards;
+  opacity: 0;
+}
+
+.heal-rect {
+  position: absolute;
+  background-color: green;
+  animation: grow 0.25s ease-out forwards;
+  width: 120px;
+  height: 120px;
+  inset: 0;
+  opacity: 0;
+}
+
 /* Animations */
 .recoil {
   animation: recoil 0.1s ease-out;
@@ -297,6 +316,17 @@
   100% {
     opacity: 0;
     transform: translateY(-50px); /* move up like a balloon */
+  }
+}
+
+@keyframes floatUp-heal {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-25px) translateX(-10px); /* move up like a balloon */
   }
 }
 

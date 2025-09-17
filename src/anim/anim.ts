@@ -10,6 +10,13 @@ export const playAnim = (e: GameEvent) => {
       playDamageAnim(e.targetUnitId, e.damage);
       playBulletAnim(e.unitId, e.targetUnitId);
       break;
+    case "unitUseAbility":
+      switch (e.ability.type) {
+        case "heal":
+          e.targets?.forEach((id) => playHealAnim(id, e.ability.value));
+          break;
+      }
+      break;
     default:
       break;
   }
@@ -89,6 +96,39 @@ export function playBulletAnim(sourceId: UnitId, targetId: UnitId) {
 
   bullet.addEventListener("transitionend", () => bullet.remove());
 }
+
+export const playHealAnim = (unitId: UnitId, value: number) => {
+  const el = document.querySelector<HTMLElement>(`#unit-${unitId}`);
+  if (!el) return;
+
+  // el.classList.remove("shake"); // reset if still applied
+  // void el.offsetWidth; // force reflow to restart animation
+  // el.classList.add("shake");
+
+  const rect = el.getBoundingClientRect();
+
+  const layer = document.querySelector<HTMLElement>("#animations-layer")!;
+
+  const textEl = document.createElement("div");
+  textEl.classList = "heal-text";
+  textEl.innerText = `+${value}hp`;
+  textEl.style.top = `${rect.top}px`;
+  textEl.style.left = `${rect.left + rect.width - 60}px`;
+  layer.append(textEl);
+
+  const rectEl = document.createElement("div");
+  rectEl.classList = "heal-rect";
+  rectEl.style.top = `${rect.top}px`;
+  rectEl.style.left = `${rect.left}px`;
+  rectEl.style.width = `${rect.width}px`;
+  rectEl.style.height = `${rect.height}px`;
+  layer.append(rectEl);
+  //   dmgRectEl.addEventListener("transitionend", () => dmgRectEl.remove());
+  setTimeout(() => {
+    textEl.remove();
+    rectEl.remove();
+  }, 1000);
+};
 
 // const playBulletAnim = (from: UnitId, to: UnitId) => {
 //   const elfrom = document.querySelector<HTMLElement>(`#unit-${from}`);

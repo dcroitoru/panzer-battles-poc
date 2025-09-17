@@ -103,7 +103,9 @@ export const getAdjacent = (unit: Unit, state: GameState): Unit[] => {
   const S = { x: pos.x, y: pos.y + 1 };
   const W = { x: pos.x - 1, y: pos.y };
   const coords = [N, E, S, W];
-  return getAllyUnits(unit, state).filter((u) => coords.filter(posEquals(u.position)).length);
+  return getAllyUnits(unit, state)
+    .filter((u) => u.alive)
+    .filter((u) => coords.filter(posEquals(u.position)).length);
 };
 
 export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
