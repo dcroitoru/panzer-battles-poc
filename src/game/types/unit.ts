@@ -1,4 +1,4 @@
-import { Abilities, Ability, Status } from "./ability";
+import { Abilities, Ability, StatusMap, StatusType } from "./ability";
 import { Armor, ArmorPen, Blitz } from "./passives";
 import { PlayerId } from "./types";
 
@@ -37,9 +37,10 @@ export type Unit = UnitVO & {
   hp: number;
   cooldown: number;
   alive: boolean;
-  status: Set<Status>;
+  // status: Set<Status>;
   position: { x: number; y: number };
   passives: Passive[];
+  status: StatusMap;
 };
 export const unitTypes = ["regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers"] as const;
 export type UnitType = (typeof unitTypes)[number];
@@ -108,8 +109,8 @@ export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, positi
     attack: base.attack,
     hp: base.hp,
     cooldown: base.cooldown,
-    status: new Set<Status>(),
     position,
     passives: base.passives || [],
+    status: new Map<StatusType, number>(),
   };
 };

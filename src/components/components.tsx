@@ -1,10 +1,9 @@
-import { createSignal, For, Show } from "solid-js";
+import { For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
 import { events, isPlaying, onSpeedChange, play, speed, stop, store, tickDelta, units } from "../store/store";
 import { Passive, Unit } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
-import { Exposed } from "../game/types/passives";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -25,6 +24,7 @@ export const UnitView = (props: { unit: Unit }) => {
   const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
   const buffs = () => props.unit.passives.filter((p) => p.kind === "buff");
   const debuffs = (): Passive[] => [];
+  const status = () => [...props.unit.status];
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
@@ -51,6 +51,16 @@ export const UnitView = (props: { unit: Unit }) => {
             {(b) => (
               <p class="text-red-800">
                 ▼ {b.type} {b.value ? b.value : ""}
+              </p>
+            )}
+          </For>
+        </div>
+
+        <div>
+          <For each={status()}>
+            {(b) => (
+              <p class="text-red-800">
+                ▼ {b[0]} {b[1]}
               </p>
             )}
           </For>

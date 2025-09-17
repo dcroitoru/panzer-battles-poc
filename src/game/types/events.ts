@@ -20,6 +20,8 @@ export type GameEvent =
       unitId: UnitId;
       targetUnitId: UnitId;
       ability: Ability;
+      source?: UnitId;
+      targets?: UnitId[];
     }
   | {
       type: "unitConsumeStatus";

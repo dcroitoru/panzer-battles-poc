@@ -1,6 +1,7 @@
-import { GameTickEvent } from "./types/events";
+import { Ability } from "./types/ability";
+import { GameEvent, GameTickEvent } from "./types/events";
 import { GameState, PlayerId } from "./types/types";
-import { createUnit, createUnitId, resetUnitId, Unit, UnitId, UnitType } from "./types/unit";
+import { createUnit, createUnitId, Position, resetUnitId, Unit, UnitId, UnitType } from "./types/unit";
 import { pickRandom, sortByDistance } from "./util";
 
 export const tickDelta = 0.25;
@@ -58,6 +59,13 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
     let attackValue = u.attack;
     target.hp -= attackValue;
     event.events.push({ type: "unitAttack", unitId: u.id, targetUnitId: target.id, damage: attackValue, remainingHp: target.hp });
+
+    if (u.base.abilities?.length) {
+      u.base.abilities.forEach((a) => {
+        const ev = useAbility(a, u, target, state);
+        if (ev) event.events.push(ev);
+      });
+    }
   });
 
   // check for dead units
@@ -75,6 +83,7 @@ export const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ?
 export const playerUnits = (id: PlayerId) => (u: Unit) => u.ownerId === id;
 export const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
 export const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
+export const getAllyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(unit.ownerId, state);
 
 const acquireTarget = (unit: Unit, state: GameState): Unit => {
   return pickClosestEnemy(unit, state);
@@ -85,7 +94,17 @@ const pickClosestEnemy = (unit: Unit, state: GameState): Unit => {
   return enemyUnits.filter((u) => u.alive).sort(sortByDistance(unit))[0];
 };
 
+const posEquals = (a: Position) => (b: Position) => a.x === b.x && a.y === b.y;
 export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;
+export const getAdjacent = (unit: Unit, state: GameState): Unit[] => {
+  const pos = unit.position;
+  const N = { x: pos.x, y: pos.y - 1 };
+  const E = { x: pos.x + 1, y: pos.y };
+  const S = { x: pos.x, y: pos.y + 1 };
+  const W = { x: pos.x - 1, y: pos.y };
+  const coords = [N, E, S, W];
+  return getAllyUnits(unit, state).filter((u) => coords.filter(posEquals(u.position)).length);
+};
 
 export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
   resetUnitId();
@@ -103,4 +122,36 @@ export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameStat
       1: p2.flat().map((u) => u.id),
     },
   };
+};
+
+const useAbility = (ability: Ability, source: Unit, target: Unit, state: GameState): GameEvent | undefined => {
+  switch (ability.type) {
+    case "addStatus":
+      const status = ability.status!;
+      const newValue = ability.value + (target.status.get(status) || 0);
+      target.status.set(status, newValue);
+
+      // console.log(target.status);
+      return {
+        type: "unitUseAbility",
+        ability,
+        unitId: source.id,
+        targetUnitId: target.id,
+      };
+    case "heal":
+      // console.log(source.id, "should heal adjacent units");
+      return {
+        type: "unitUseAbility",
+        ability,
+        unitId: source.id,
+        source: source.id,
+        targetUnitId: source.id,
+        targets: getAdjacent(source, state).map((u) => u.id),
+      };
+
+    default:
+      return;
+
+    // if(target.status.has(ability.status!)) {}
+  }
 };

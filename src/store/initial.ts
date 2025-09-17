@@ -9,7 +9,7 @@ export const p1 = [
 export const p2 = [
   ["lightTank", "mediumTank", "mobileAntitank", "mediumTank", "lightTank"],
   ["conscripts", "lightTank", "lightTank", "lightTank", "lightTank"],
-  ["conscripts", "lightTank", "lightTank", "lightTank", "lightTank"],
+  ["snipers", "snipers", "lightTank", "fieldMedics", "lightTank"],
 ] as UnitType[][];
 
 // export const p1 = [
