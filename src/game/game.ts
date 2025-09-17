@@ -57,6 +57,17 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
     // should apply status effects here
     // attack
     let attackValue = u.attack;
+
+    target.passives.forEach((p) => {
+      if (p.type === "armor") {
+        let armorPen = u.passives.find((up) => up.type === "armor-pen");
+        let pvalue = Math.max(p.value! - (armorPen?.value || 0), 0);
+        attackValue -= pvalue;
+      }
+    });
+
+    attackValue = Math.max(attackValue, 0);
+
     target.hp -= attackValue;
     event.events.push({ type: "unitAttack", unitId: u.id, targetUnitId: target.id, damage: attackValue, remainingHp: target.hp });
 
