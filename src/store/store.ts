@@ -14,6 +14,7 @@ export const [events, setEvents] = createSignal<GameTickEvent[]>([]);
 export const [store, setStore] = createStore(initialState);
 export const [speed, setSpeed] = createSignal<ReplaySpeed>(2);
 export const [isPlaying, setIsPlaying] = createSignal(false);
+export const [enableSounds, setEnableSounds] = createSignal(true);
 
 export const tickDelta = 0.25;
 
@@ -49,7 +50,7 @@ const processNextTick = () => {
   updateStoreState(state);
   setEvents((prev) => [...prev, event]);
   event.events.forEach(playAnim);
-  playSounds(event);
+  if (enableSounds()) playSounds(event);
   // if(event.events.findIndex(ge => ge.type === "unitAttack"))
 };
 

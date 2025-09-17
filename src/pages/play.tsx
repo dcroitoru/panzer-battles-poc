@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { PlayStopBtn, ReplayEvents, ReplaySpeed, Units } from "../components/components";
+import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, Units } from "../components/components";
 import { isPlaying, maxTicks, store } from "../store/store";
 
 export default function Play() {
@@ -8,7 +8,10 @@ export default function Play() {
       <h1>Play</h1>
       <PlayStopBtn></PlayStopBtn>
       <p>Game state: {isPlaying() ? "Playing" : "Stopped"}</p>
-      <ReplaySpeed></ReplaySpeed>
+      <div class="flex flex-row gap-4">
+        <ReplaySpeed></ReplaySpeed>
+        <PlaySounds></PlaySounds>
+      </div>
 
       <div>
         Tick: {store.tick} (max {maxTicks})
