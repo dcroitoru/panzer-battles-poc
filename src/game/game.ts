@@ -7,6 +7,7 @@ import { pickRandom, sortByDistance } from "./util";
 export const tickDelta = 0.25;
 
 const aliveUnits = (state: GameState) => [...state.units.all.values().filter((u) => u.alive)];
+const blitzUnits = (state: GameState) => aliveUnits(state).filter((u) => u.passives.findIndex((p) => p.type === "blitz") != -1);
 
 export const createTick = (state: GameState): { state: GameState; event: GameTickEvent } => {
   if (state.gameplayState === "not-started")
@@ -41,6 +42,29 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   const tick = state.tick + 1;
   const event: GameTickEvent = { tick, events: [] };
   const activatedUnits: Unit[] = [];
+
+  if (tick === 1) {
+    // Activate blitz units
+    blitzUnits(state).forEach((u) => {
+      // This is repeated code!
+      const target = acquireTarget(u, state);
+      let attackValue = u.attack;
+
+      target.passives.forEach((p) => {
+        if (p.type === "armor") {
+          let armorPen = u.passives.find((up) => up.type === "armor-pen");
+          let pvalue = Math.max(p.value! - (armorPen?.value || 0), 0);
+          attackValue -= pvalue;
+        }
+      });
+
+      attackValue = Math.max(attackValue, 0);
+
+      target.hp -= attackValue;
+      event.events.push({ type: "unitAttack", unitId: u.id, targetUnitId: target.id, damage: attackValue, remainingHp: target.hp });
+    });
+  }
+
   alive.forEach((u) => {
     u.cooldown -= tickDelta;
     if (u.cooldown <= 0) {
