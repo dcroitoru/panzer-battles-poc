@@ -41,6 +41,10 @@
   }
 }
 
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
 #animations-layer {
   position: fixed;
   top: 0;

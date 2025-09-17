@@ -1,6 +1,6 @@
 import { For, Suspense } from "solid-js";
 import { PlayerId } from "../game/types/types";
-import { onInitialStateChange, store, units } from "../store/store";
+import { clearAllPlayerUnits, onInitialStateChange, store, units } from "../store/store";
 import { playerUnits } from "../game/game";
 import { Unit, UnitType, unitTypes } from "../game/types/unit";
 
@@ -33,7 +33,13 @@ const EditUnits = (props: { playerId: PlayerId }) => {
   };
   return (
     <div>
-      <h3>Player {props.playerId} Units</h3>
+      <div class="flex gap-8 items-center">
+        <h3>Player {props.playerId} Units</h3>
+
+        <button class="btn-primary h-6" onClick={() => clearAllPlayerUnits(props.playerId)}>
+          Clear
+        </button>
+      </div>
 
       <div class="flex flex-row gap-4">
         <div class="units-container">

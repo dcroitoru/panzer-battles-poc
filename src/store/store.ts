@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { GameState, ReplaySpeed } from "../game/types/types";
+import { GameState, PlayerId, ReplaySpeed } from "../game/types/types";
 import { createSignal } from "solid-js";
 import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2 } from "./initial";
@@ -67,6 +67,12 @@ export const onInitialStateChange = (unit: Unit, newType: UnitType) => {
   let arr = unit.ownerId === 0 ? p1 : p2;
   const { x, y } = unit.position;
   arr[y][x] = newType;
+  updateStoreState(createInitialState(p1, p2));
+};
+
+export const clearAllPlayerUnits = (playerId: PlayerId) => {
+  let arr = playerId === 0 ? p1 : p2;
+  arr.forEach((row, y) => row.forEach((c, x) => (arr[y][x] = "no-unit")));
   updateStoreState(createInitialState(p1, p2));
 };
 
