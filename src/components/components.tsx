@@ -121,7 +121,7 @@ export const Units = (props: { playerId: PlayerId }) => {
     <div>
       <h3>
         Player {props.playerId} Units
-        <Show when={isWinner()}>🏆</Show>
+        <Show when={isWinner()}> - Winner! - 🐐🏆🐐 </Show>
       </h3>
       {/* <Show when={props.playerId == 0}>
         <label class="block">
