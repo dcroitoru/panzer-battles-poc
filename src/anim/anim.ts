@@ -2,7 +2,7 @@ import { GameEvent, GameTickEvent } from "../game/types/events";
 import { Unit, UnitId } from "../game/types/unit";
 
 import shot1 from "../assets/audio/shot-1.mp3";
-import shot2 from "../assets/audio/shot-1.mp3";
+import shot2 from "../assets/audio/shot-2.mp3";
 
 export const bulletAnimDuration = 0.5;
 
