@@ -97,6 +97,19 @@
   transform: scaleY(-1);
 }
 
+.no-unit {
+  border: 1px solid #aaa;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  /* padding: 4px; */
+  font-size: 12px;
+  color: #aaa;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
 .unit {
   border: 1px solid;
   width: 120px;

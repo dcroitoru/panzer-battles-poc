@@ -46,6 +46,8 @@ export const ShowEventsLog = () => (
   </label>
 );
 
+export const NoUnitView = () => <div class="no-unit">Empty</div>;
+
 export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   const damaged = () => props.unit.hp < props.unit.base.hp;
@@ -122,7 +124,7 @@ export const Units = (props: { playerId: PlayerId }) => {
 
       <div class="flex flex-row gap-4">
         <div class="units-container">
-          <For each={unitsArr()}>{(u) => <UnitView unit={u}></UnitView>}</For>
+          <For each={unitsArr()}>{(u) => (u.type === "no-unit" ? <NoUnitView></NoUnitView> : <UnitView unit={u}></UnitView>)}</For>
         </div>
 
         <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
