@@ -141,6 +141,6 @@ export const playShotSound = () => {
   const rnd = 1 + Math.round(Math.random());
   // const src = rnd > 0.5 ? 1 : 2;
   const audio = new Audio(`src/assets/audio/shot-${rnd}.mp3`);
-  audio.volume = 0.15;
+  audio.volume = 0.05;
   audio.play();
 };
