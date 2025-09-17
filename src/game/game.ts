@@ -29,13 +29,13 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   const p2alive = alive.filter((u) => u.ownerId === 1);
   if (p1alive.length === 0)
     return {
-      state: { ...state, gameplayState: "ended", outcome: { winner: 1 } },
+      state: { ...state, gameplayState: "ended", outcome: "player-1-wins" },
       event: { tick: state.tick, events: [{ type: "gameEnd" }] },
     };
 
   if (p2alive.length === 0)
     return {
-      state: { ...state, gameplayState: "ended", outcome: { winner: 0 } },
+      state: { ...state, gameplayState: "ended", outcome: "player-0-wins" },
       event: { tick: state.tick, events: [{ type: "gameEnd" }] },
     };
 

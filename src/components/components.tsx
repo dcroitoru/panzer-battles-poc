@@ -115,10 +115,14 @@ export const Units = (props: { playerId: PlayerId }) => {
   // const unitsArr = () => units().filter(playerUnits(props.playerId));
   // const [reorient, setReorient] = createSignal(false);
   const reorient = () => props.playerId === 0;
+  const isWinner = () => store.outcome === `player-${props.playerId}-wins`;
 
   return (
     <div>
-      <h3>Player {props.playerId} Units</h3>
+      <h3>
+        Player {props.playerId} Units
+        <Show when={isWinner()}>🏆</Show>
+      </h3>
       {/* <Show when={props.playerId == 0}>
         <label class="block">
           <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
