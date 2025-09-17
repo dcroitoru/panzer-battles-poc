@@ -1,6 +1,9 @@
 import { GameEvent, GameTickEvent } from "../game/types/events";
 import { Unit, UnitId } from "../game/types/unit";
 
+import shot1 from "../assets/audio/shot-1.mp3";
+import shot2 from "../assets/audio/shot-1.mp3";
+
 export const bulletAnimDuration = 0.5;
 
 export const playAnim = (e: GameEvent) => {
@@ -137,10 +140,11 @@ export const playSounds = (event: GameTickEvent) => {
   }
 };
 
+const sounds = [shot1, shot2];
 export const playShotSound = () => {
-  const rnd = 1 + Math.round(Math.random());
+  const rnd = Math.round(Math.random());
   // const src = rnd > 0.5 ? 1 : 2;
-  const audio = new Audio(`src/assets/audio/shot-${rnd}.mp3`);
+  const audio = new Audio(sounds[rnd]);
   audio.volume = 0.05;
   audio.play();
 };
