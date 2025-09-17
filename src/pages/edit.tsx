@@ -6,7 +6,7 @@ import { Unit, UnitType, unitTypes } from "../game/types/unit";
 
 const EditUnitView = (props: { unit: Unit; onChange: (unit: Unit, newType: UnitType) => void }) => {
   return (
-    <div class="unit">
+    <div class="unit" classList={{ [props.unit.type]: true }}>
       {/* <p>{props.unit.type}</p> */}
       <select class="w-full" name="unitType" id="" onChange={(e) => props.onChange(props.unit, e.target.value as UnitType)}>
         <For each={unitTypes}>
@@ -22,7 +22,11 @@ const EditUnitView = (props: { unit: Unit; onChange: (unit: Unit, newType: UnitT
 };
 
 const EditUnits = (props: { playerId: PlayerId }) => {
-  const unitsArr = () => units().filter(playerUnits(props.playerId));
+  // const unitsArr = () => units().filter(playerUnits(props.playerId));
+  const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
+  // const unitsArr = () => units().filter(playerUnits(props.playerId));
+  // const [reorient, setReorient] = createSignal(false);
+  const reorient = () => props.playerId === 0;
   const onChange = (unit: Unit, newType: UnitType) => {
     // console.log("player", props.playerId, "should update unit", unit.position, "with type", newType);
     onInitialStateChange(unit, newType);
@@ -36,7 +40,7 @@ const EditUnits = (props: { playerId: PlayerId }) => {
           <For each={unitsArr()}>{(u) => <EditUnitView unit={u} onChange={onChange}></EditUnitView>}</For>
         </div>
 
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
           <div class="h-[120px] grid items-center font-bold">Front</div>
           <div class="h-[120px] grid items-center font-bold">Support</div>
           <div class="h-[120px] grid items-center font-bold">Back</div>

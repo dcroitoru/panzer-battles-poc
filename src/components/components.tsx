@@ -46,7 +46,11 @@ export const ShowEventsLog = () => (
   </label>
 );
 
-export const NoUnitView = () => <div class="no-unit">Empty</div>;
+export const NoUnitView = () => (
+  <div class="unit no-unit">
+    <p class="unit-name">Empty</p>
+  </div>
+);
 
 export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;

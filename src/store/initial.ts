@@ -4,7 +4,7 @@ import { UnitType } from "../game/types/unit";
 export const p1 = [
   ["mobileAntitank", "mobileAntitank", "conscripts", "lightTank", "conscripts"],
   ["regulars", "regulars", "conscripts", "lightTank", "conscripts"],
-  ["regulars", "regulars", "conscripts", "lightTank", "conscripts"],
+  ["no-unit", "regulars", "conscripts", "lightTank", "no-unit"],
 ] as UnitType[][];
 export const p2 = [
   ["lightTank", "mediumTank", "mobileAntitank", "mediumTank", "lightTank"],
