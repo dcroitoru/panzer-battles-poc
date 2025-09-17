@@ -1,6 +1,20 @@
 import { For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/types";
-import { enableSounds, events, isPlaying, onSpeedChange, play, setEnableSounds, speed, stop, store, tickDelta, units } from "../store/store";
+import {
+  enableSounds,
+  events,
+  isPlaying,
+  onSpeedChange,
+  play,
+  setEnableSounds,
+  setShowEvents,
+  showEvents,
+  speed,
+  stop,
+  store,
+  tickDelta,
+  units,
+} from "../store/store";
 import { Passive, Unit } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
@@ -24,6 +38,12 @@ export const PlaySounds = () => (
       Play sounds <input type="checkbox" checked={enableSounds()} onChange={() => setEnableSounds((prev) => !prev)}></input>
     </label>
   </div>
+);
+
+export const ShowEventsLog = () => (
+  <label>
+    Show Events Log <input type="checkbox" checked={showEvents()} onChange={() => setShowEvents((prev) => !prev)}></input>
+  </label>
 );
 
 export const UnitView = (props: { unit: Unit }) => {

@@ -15,6 +15,7 @@ export const [store, setStore] = createStore(initialState);
 export const [speed, setSpeed] = createSignal<ReplaySpeed>(2);
 export const [isPlaying, setIsPlaying] = createSignal(false);
 export const [enableSounds, setEnableSounds] = createSignal(true);
+export const [showEvents, setShowEvents] = createSignal(true);
 
 export const tickDelta = 0.25;
 
@@ -51,6 +52,7 @@ const processNextTick = () => {
   setEvents((prev) => [...prev, event]);
   event.events.forEach(playAnim);
   if (enableSounds()) playSounds(event);
+  scrollEventsContainer();
   // if(event.events.findIndex(ge => ge.type === "unitAttack"))
 };
 
@@ -66,4 +68,14 @@ export const onInitialStateChange = (unit: Unit, newType: UnitType) => {
   const { x, y } = unit.position;
   arr[y][x] = newType;
   updateStoreState(createInitialState(p1, p2));
+};
+
+const scrollEventsContainer = () => {
+  const el = document.querySelector(".replay-events");
+  if (!el) {
+    console.log("could not find .replay-events");
+    return;
+  }
+
+  el.scrollTop = el.scrollHeight;
 };

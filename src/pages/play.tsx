@@ -1,6 +1,6 @@
-import { For } from "solid-js";
-import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, Units } from "../components/components";
-import { isPlaying, maxTicks, store } from "../store/store";
+import { For, Show } from "solid-js";
+import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, ShowEventsLog, Units } from "../components/components";
+import { isPlaying, maxTicks, showEvents, store } from "../store/store";
 
 export default function Play() {
   return (
@@ -11,6 +11,7 @@ export default function Play() {
       <div class="flex flex-row gap-4">
         <ReplaySpeed></ReplaySpeed>
         <PlaySounds></PlaySounds>
+        <ShowEventsLog></ShowEventsLog>
       </div>
 
       <div>
@@ -19,11 +20,19 @@ export default function Play() {
       <div>{store.gameplayState}</div>
       <div>{JSON.stringify(store.outcome)}</div>
 
-      <Units playerId={0}></Units>
-      <hr class="h-4 my-4 bg-gray-600"></hr>
-      <Units playerId={1}></Units>
+      <div class="flex flex-row gap-8 board-container">
+        <div>
+          <Units playerId={0}></Units>
+          <hr class="h-2 my-4 bg-gray-600"></hr>
+          <Units playerId={1}></Units>
+        </div>
 
-      <ReplayEvents></ReplayEvents>
+        <div class="replay-events">
+          <Show when={showEvents()}>
+            <ReplayEvents></ReplayEvents>
+          </Show>
+        </div>
+      </div>
     </section>
   );
 }
