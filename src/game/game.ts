@@ -68,6 +68,9 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   }
 
   alive.forEach((u) => {
+    // const ammo = u.passives.find((a) => a.type === "ammo");
+    if (u.ammo != undefined && u.ammo <= 0) return;
+
     u.cooldown -= tickDelta;
     if (u.cooldown <= 0) {
       u.cooldown = u.base.cooldown;
@@ -78,6 +81,11 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   // trigger all attacks and activated abilities
   activatedUnits.forEach((u) => {
     // console.log("should activate unit", u.type, u.cooldown);
+    // const ammo = u.passives.find((a) => a.type === "ammo");
+    if (u.ammo != undefined) {
+      if (u.ammo <= 0) return;
+      u.ammo -= 1;
+    }
 
     const target = acquireTarget(u, state);
     // should apply status effects here

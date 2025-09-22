@@ -62,6 +62,7 @@ export const UnitView = (props: { unit: Unit }) => {
   const status = () => [...props.unit.status];
   const statusBuff = () => status().filter((s) => StatusKind[s[0]] === "buff");
   const statusDebuff = () => status().filter((s) => StatusKind[s[0]] === "debuff");
+  const ammo = () => props.unit.ammo;
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
@@ -111,6 +112,10 @@ export const UnitView = (props: { unit: Unit }) => {
             )}
           </For>
         </div>
+
+        <Show when={ammo() != undefined}>
+          <div>💣 {ammo()}</div>
+        </Show>
       </div>
 
       <div class="unit-attack">{props.unit.attack}</div>

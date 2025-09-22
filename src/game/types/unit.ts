@@ -42,6 +42,7 @@ export type Unit = UnitVO & {
   position: { x: number; y: number };
   passives: Passive[];
   status: StatusMap;
+  ammo?: number;
 };
 export const unitTypes = ["no-unit", "regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers", "guards"] as const;
 export type UnitType = (typeof unitTypes)[number];
@@ -83,7 +84,7 @@ export const UnitBases: Record<UnitType, UnitBase> = {
     attack: 4,
     hp: 15,
     cooldown: 7,
-    passives: [Passives.Armor(1), Passives.ArmorPen()],
+    passives: [Passives.Armor(1), Passives.ArmorPen(), Passives.Ammo(3)],
   },
   fieldMedics: {
     type: "fieldMedics",
@@ -116,6 +117,8 @@ export const createUnitVO = (type: UnitType): UnitVO => ({ id: createUnitId(), t
 export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, position: Position): Unit => {
   const base = UnitBases[type];
   const alive = type === "no-unit" ? false : true;
+  const passives = base.passives || [];
+  const ammo = passives.find((p) => p.type === "ammo")?.value;
   return {
     id,
     type,
@@ -128,5 +131,6 @@ export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, positi
     position,
     passives: base.passives || [],
     status: new Map<StatusType, number>(),
+    ammo,
   };
 };
