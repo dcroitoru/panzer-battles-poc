@@ -18,6 +18,7 @@ import {
 import { Passive, Unit } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
+import { StatusKind } from "../game/types/ability";
 
 export const ReplaySpeed = () => (
   <div class="flex flex-row gap-4">
@@ -56,9 +57,11 @@ export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   const damaged = () => props.unit.hp < props.unit.base.hp;
   const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
-  const buffs = () => props.unit.passives.filter((p) => p.kind === "buff");
+  const buffs = () => [...props.unit.passives.filter((p) => p.kind === "buff")];
   const debuffs = (): Passive[] => [];
   const status = () => [...props.unit.status];
+  const statusBuff = () => status().filter((s) => StatusKind[s[0]] === "buff");
+  const statusDebuff = () => status().filter((s) => StatusKind[s[0]] === "debuff");
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
@@ -91,7 +94,16 @@ export const UnitView = (props: { unit: Unit }) => {
         </div>
 
         <div>
-          <For each={status()}>
+          <For each={statusBuff()}>
+            {(b) => (
+              <p class="text-green-800">
+                ▲ {b[0]} {b[1]}
+              </p>
+            )}
+          </For>
+        </div>
+        <div>
+          <For each={statusDebuff()}>
             {(b) => (
               <p class="text-red-800">
                 ▼ {b[0]} {b[1]}
