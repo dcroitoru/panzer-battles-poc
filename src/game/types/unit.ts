@@ -1,13 +1,13 @@
 import { Abilities, Ability, StatusMap, StatusType } from "./ability";
-import { Armor, ArmorPen, Blitz } from "./passives";
+import { Passives } from "./passives";
 import { PlayerId } from "./types";
 
 export type Position = { x: number; y: number };
 
-export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted";
+export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted" | "ammo";
 export type Passive = {
   type: PassiveType;
-  kind: "buff" | "debuff";
+  kind: "buff" | "debuff" | "other";
   value?: number;
   consumable?: boolean;
   mod?: "attack" | "defense";
@@ -53,36 +53,36 @@ export const UnitBases: Record<UnitType, UnitBase> = {
   },
   regulars: {
     type: "regulars",
-    attack: 3,
-    hp: 12,
-    cooldown: 4, //5
+    attack: 4,
+    hp: 20,
+    cooldown: 5, //5
   },
   conscripts: {
     type: "conscripts",
-    attack: 2,
-    hp: 5,
+    attack: 4,
+    hp: 10,
     cooldown: 5, //5
   },
   lightTank: {
     type: "lightTank",
-    attack: 3,
-    hp: 15, //15
-    cooldown: 6, //6
-    passives: [Armor(1), Blitz()],
+    attack: 5,
+    hp: 16, //15
+    cooldown: 4, //6
+    passives: [Passives.Armor(1), Passives.Blitz()],
   },
   mediumTank: {
     type: "mediumTank",
-    attack: 3,
-    hp: 20,
-    cooldown: 7,
-    passives: [Armor(2)],
+    attack: 5,
+    hp: 16,
+    cooldown: 4,
+    passives: [Passives.Armor(2)],
   },
   mobileAntitank: {
     type: "mobileAntitank",
     attack: 4,
     hp: 15,
     cooldown: 7,
-    passives: [Armor(1), ArmorPen(4)],
+    passives: [Passives.Armor(1), Passives.ArmorPen()],
   },
   fieldMedics: {
     type: "fieldMedics",
@@ -90,11 +90,12 @@ export const UnitBases: Record<UnitType, UnitBase> = {
     hp: 10,
     cooldown: 5, // 5 in spreadsheet
     abilities: [Abilities.Heal(1)],
+    passives: [],
   },
   snipers: {
     type: "snipers",
-    attack: 2,
-    hp: 10,
+    attack: 4,
+    hp: 20,
     cooldown: 8,
     abilities: [Abilities.Expose(1)],
   },

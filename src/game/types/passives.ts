@@ -1,10 +1,10 @@
 import { Passive } from "./unit";
 
-export const Armor = (value: number): Passive => ({ type: "armor", value, kind: "buff", mod: "defense" });
-export const ArmorPen = (value: number): Passive => ({ type: "armor-pen", value, kind: "buff", mod: "attack" });
-
-export const Multistrike = (value: number): Passive => ({ type: "multistrike", value, kind: "buff", mod: "attack" });
-
-export const Exposed = (value: number): Passive => ({ type: "exposed", value, kind: "debuff", consumable: true, mod: "defense" });
-
-export const Blitz = (): Passive => ({ type: "blitz", kind: "buff" });
+export const Passives = {
+  Armor: (value: number): Passive => ({ type: "armor", value, kind: "buff", mod: "defense" }),
+  ArmorPen: (): Passive => ({ type: "armor-pen", kind: "buff", mod: "attack" }),
+  Multistrike: (value: number): Passive => ({ type: "multistrike", value, kind: "buff", mod: "attack" }),
+  Ammo: (value: number): Passive => ({ type: "ammo", value, kind: "other", mod: "attack" }),
+  Exposed: (value: number): Passive => ({ type: "exposed", value, kind: "debuff", consumable: true, mod: "defense" }),
+  Blitz: (): Passive => ({ type: "blitz", kind: "buff" }),
+};

@@ -51,10 +51,12 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
       let attackValue = u.attack;
 
       target.passives.forEach((p) => {
+        console.log("passive: ", p);
+
         if (p.type === "armor") {
           let armorPen = u.passives.find((up) => up.type === "armor-pen");
-          let pvalue = Math.max(p.value! - (armorPen?.value || 0), 0);
-          attackValue -= pvalue;
+          attackValue -= armorPen ? 0 : p.value!;
+          console.log(attackValue);
         }
       });
 
@@ -85,8 +87,8 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
     target.passives.forEach((p) => {
       if (p.type === "armor") {
         let armorPen = u.passives.find((up) => up.type === "armor-pen");
-        let pvalue = Math.max(p.value! - (armorPen?.value || 0), 0);
-        attackValue -= pvalue;
+        attackValue -= armorPen ? 0 : p.value!;
+        console.log(attackValue);
       }
     });
 

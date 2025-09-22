@@ -23,6 +23,17 @@ export const p2 = [
 //   ["lightTank", "lightTank", "lightTank", "lightTank", "lightTank"],
 // ] as UnitType[][];
 
+// export const p1 = [
+//   ["no-unit", "no-unit", "mediumTank", "no-unit", "no-unit"],
+//   ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+//   ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+// ] as UnitType[][];
+// export const p2 = [
+//   ["no-unit", "no-unit", "mobileAntitank", "no-unit", "no-unit"],
+//   ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+//   ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+// ] as UnitType[][];
+
 export const initialState = createInitialState(p1, p2);
 
 console.log(initialState);
