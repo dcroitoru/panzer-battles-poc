@@ -1,0 +1,24 @@
+.lightTank {
+  background-image: url("assets/icons/tank.png");
+}
+.mediumTank {
+  background-image: url("assets/icons/battle-tank.png");
+}
+.mobileAntitank {
+  background-image: url("assets/icons/jeep.png");
+}
+.conscripts {
+  background-image: url("assets/icons/luger.png");
+}
+.fieldMedics {
+  background-image: url("assets/icons/nurse-male.png");
+}
+.regulars {
+  background-image: url("assets/icons/thompson-m1.png");
+}
+.snipers {
+  background-image: url("assets/icons/headshot.png");
+}
+.guards {
+  background-image: url("assets/icons/checked-shield.png");
+}

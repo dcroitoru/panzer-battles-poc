@@ -92,6 +92,13 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
       }
     });
 
+    if (target.status.has("entrenched")) {
+      attackValue = 0;
+      let newValue = target.status.get("entrenched")! - 1;
+      if (newValue > 0) target.status.set("entrenched", newValue);
+      else target.status.delete("entrenched");
+    }
+
     attackValue = Math.max(attackValue, 0);
 
     target.hp -= attackValue;
@@ -166,6 +173,7 @@ export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameStat
 const useAbility = (ability: Ability, source: Unit, target: Unit, state: GameState): GameEvent | undefined => {
   switch (ability.type) {
     case "addStatus":
+      if (ability.target == "self") target = source;
       const status = ability.status!;
       const newValue = ability.value + (target.status.get(status) || 0);
       target.status.set(status, newValue);

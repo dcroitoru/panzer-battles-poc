@@ -4,10 +4,11 @@ import { PlayerId } from "./types";
 
 export type Position = { x: number; y: number };
 
+export type PassiveKind = "buff" | "debuff" | "other";
 export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted" | "ammo";
 export type Passive = {
   type: PassiveType;
-  kind: "buff" | "debuff" | "other";
+  kind: PassiveKind;
   value?: number;
   consumable?: boolean;
   mod?: "attack" | "defense";
@@ -42,7 +43,7 @@ export type Unit = UnitVO & {
   passives: Passive[];
   status: StatusMap;
 };
-export const unitTypes = ["no-unit", "regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers"] as const;
+export const unitTypes = ["no-unit", "regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers", "guards"] as const;
 export type UnitType = (typeof unitTypes)[number];
 export const UnitBases: Record<UnitType, UnitBase> = {
   "no-unit": {
@@ -98,6 +99,13 @@ export const UnitBases: Record<UnitType, UnitBase> = {
     hp: 20,
     cooldown: 8,
     abilities: [Abilities.Expose(1)],
+  },
+  guards: {
+    type: "guards",
+    attack: 2,
+    hp: 30,
+    cooldown: 5,
+    abilities: [Abilities.EntrenchSelf(2)],
   },
 };
 
