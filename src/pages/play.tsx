@@ -2,7 +2,7 @@ import { For, Show } from "solid-js";
 import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, ShowEventsLog, Units } from "../components/components";
 import { isPlaying, maxTicks, showEvents, store } from "../store/store";
 
-export default function Play() {
+export function Play() {
   return (
     <section class="container mx-auto flex flex-col">
       <h1>Play</h1>

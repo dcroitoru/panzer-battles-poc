@@ -4,12 +4,12 @@ import { UnitType } from "../game/types/unit";
 // export const p1 = [
 //   ["mobileAntitank", "mobileAntitank", "conscripts", "lightTank", "conscripts"],
 //   ["regulars", "regulars", "conscripts", "lightTank", "conscripts"],
-//   ["no-unit", "regulars", "conscripts", "lightTank", "no-unit"],
+//   ["noUnit", "regulars", "conscripts", "lightTank", "noUnit"],
 // ] as UnitType[][];
 // export const p2 = [
 //   ["lightTank", "mediumTank", "mobileAntitank", "mediumTank", "lightTank"],
 //   ["conscripts", "lightTank", "lightTank", "lightTank", "mediumTank"],
-//   ["no-unit", "snipers", "lightTank", "fieldMedics", "no-unit"],
+//   ["noUnit", "snipers", "lightTank", "fieldMedics", "noUnit"],
 // ] as UnitType[][];
 
 // export const p1 = [
@@ -24,14 +24,14 @@ import { UnitType } from "../game/types/unit";
 // ] as UnitType[][];
 
 export const p1 = [
-  ["no-unit", "no-unit", "mediumTank", "no-unit", "no-unit"],
-  ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
-  ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+  ["noUnit", "noUnit", "mediumTank", "noUnit", "noUnit"],
+  ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
+  ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
 ] as UnitType[][];
 export const p2 = [
-  ["no-unit", "no-unit", "guards", "no-unit", "no-unit"],
-  ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
-  ["no-unit", "no-unit", "no-unit", "no-unit", "no-unit"],
+  ["noUnit", "noUnit", "guards", "noUnit", "noUnit"],
+  ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
+  ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
 ] as UnitType[][];
 
 export const initialState = createInitialState(p1, p2);

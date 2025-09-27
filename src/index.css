@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import url("units.css");
+@import url("animations.css");
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -101,7 +102,7 @@
   transform: scaleY(-1);
 }
 
-.unit.no-unit {
+.unit.noUnit {
   border: 1px solid #ddd;
   width: 120px;
   height: 120px;
@@ -109,7 +110,7 @@
   /* padding: 4px; */
 }
 
-.no-unit .unit-name {
+.noUnit .unit-name {
   color: #aaa;
   font-size: 12px;
   width: 100%;
@@ -207,28 +208,6 @@
   background-color: rgb(122, 3, 3);
 }
 
-.lightTank {
-  background-image: url("assets/icons/tank.png");
-}
-.mediumTank {
-  background-image: url("assets/icons/battle-tank.png");
-}
-.mobileAntitank {
-  background-image: url("assets/icons/jeep.png");
-}
-.conscripts {
-  background-image: url("assets/icons/luger.png");
-}
-.fieldMedics {
-  background-image: url("assets/icons/nurse-male.png");
-}
-.regulars {
-  background-image: url("assets/icons/thompson-m1.png");
-}
-.snipers {
-  background-image: url("assets/icons/headshot.png");
-}
-
 .damage-number {
   position: absolute;
   font-size: 24px;
@@ -299,74 +278,55 @@
   }
 }
 
-@keyframes recoil {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  } /* small downward kick */
-  100% {
-    transform: translateY(0);
-  }
+.unit-with-description {
+  border: 1px solid;
+  cursor: pointer;
+  user-select: none;
 }
 
-@keyframes shake {
-  0% {
-    transform: translate(0, 0);
-  }
-  20% {
-    transform: translate(-5px, 0);
-  }
-  40% {
-    transform: translate(5px, 0);
-  }
-  60% {
-    transform: translate(-3px, 0);
-  }
-  80% {
-    transform: translate(3px, 0);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+.unit-with-description:hover {
+  background-color: #ddd;
 }
 
-@keyframes grow {
-  0% {
-    opacity: 0.5;
-    transform: scale(0, 0);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(125%, 125%);
-  }
+.unit-image {
+  width: 64px;
+  height: 64px;
+  background-size: cover;
+  filter: brightness(80%);
 }
 
-@keyframes floatUp {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-50px); /* move up like a balloon */
-  }
+.affix {
+  border: 1px solid #ccc;
+  padding: 0 2px;
 }
 
-@keyframes floatUp-heal {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-25px) translateX(-10px); /* move up like a balloon */
-  }
+.unit-hovered {
+  background-color: #ddd;
 }
 
-/* @keyframes shoot {
-  0% {
-    height: 0;
-  }
-} */
+.dragged-unit {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid #ccc;
+}
+
+.btn-delete {
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background-color: white;
+}
+
+.btn-delete:hover {
+  border-color: #f66;
+  background-color: #f99;
+  color: white;
+}

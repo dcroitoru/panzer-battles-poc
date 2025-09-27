@@ -4,12 +4,14 @@ import { createSignal } from "solid-js";
 import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2 } from "./initial";
 import { playAnim, playSounds } from "../anim/anim";
-import { Unit, UnitType } from "../game/types/unit";
+import { Unit, UnitBase, UnitBases, UnitType } from "../game/types/unit";
 import { GameTickEvent } from "../game/types/events";
 
 const initialStoreState = [...initialState.units.all.values()];
 export const [units, setUnits] = createSignal(initialStoreState);
 export const [events, setEvents] = createSignal<GameTickEvent[]>([]);
+export const [draggedUnit, setDraggedUnit] = createSignal<UnitBase>(UnitBases.noUnit);
+export const isDragging = () => draggedUnit() !== UnitBases.noUnit;
 
 export const [store, setStore] = createStore(initialState);
 export const [speed, setSpeed] = createSignal<ReplaySpeed>(2);
@@ -64,6 +66,8 @@ export const onSpeedChange = (sp: ReplaySpeed) => {
 };
 
 export const onInitialStateChange = (unit: Unit, newType: UnitType) => {
+  console.log("inside initial state change", unit, newType);
+
   let arr = unit.ownerId === 0 ? p1 : p2;
   const { x, y } = unit.position;
   arr[y][x] = newType;
@@ -72,7 +76,7 @@ export const onInitialStateChange = (unit: Unit, newType: UnitType) => {
 
 export const clearAllPlayerUnits = (playerId: PlayerId) => {
   let arr = playerId === 0 ? p1 : p2;
-  arr.forEach((row, y) => row.forEach((c, x) => (arr[y][x] = "no-unit")));
+  arr.forEach((row, y) => row.forEach((c, x) => (arr[y][x] = "noUnit")));
   updateStoreState(createInitialState(p1, p2));
 };
 
@@ -84,4 +88,17 @@ const scrollEventsContainer = () => {
   }
 
   el.scrollTop = el.scrollHeight;
+};
+
+document.onmouseup = (e) => {
+  setTimeout(() => {
+    console.log("should check if dropped on valid target");
+    const target = e.target;
+    console.log("target", target);
+
+    const valid = false;
+    console.log("valid?", valid);
+
+    setDraggedUnit(UnitBases.noUnit);
+  }, 10);
 };

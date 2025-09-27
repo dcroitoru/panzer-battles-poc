@@ -15,7 +15,7 @@ import {
   tickDelta,
   units,
 } from "../store/store";
-import { Passive, Unit } from "../game/types/unit";
+import { Passive, Unit, UnitBases, unitTypes } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
 import { StatusKind } from "../game/types/ability";
@@ -48,7 +48,7 @@ export const ShowEventsLog = () => (
 );
 
 export const NoUnitView = () => (
-  <div class="unit no-unit">
+  <div class="unit noUnit">
     <p class="unit-name">Empty</p>
   </div>
 );
@@ -149,7 +149,7 @@ export const Units = (props: { playerId: PlayerId }) => {
 
       <div class="flex flex-row gap-4">
         <div class="units-container">
-          <For each={unitsArr()}>{(u) => (u.type === "no-unit" ? <NoUnitView></NoUnitView> : <UnitView unit={u}></UnitView>)}</For>
+          <For each={unitsArr()}>{(u) => (u.type === "noUnit" ? <NoUnitView></NoUnitView> : <UnitView unit={u}></UnitView>)}</For>
         </div>
 
         <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
