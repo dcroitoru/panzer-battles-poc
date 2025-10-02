@@ -79,7 +79,7 @@ export const UnitView = (props: { unit: Unit }) => {
         <div class="buffs">
           <For each={buffs()}>
             {(b) => (
-              <p class="text-green-800">
+              <p class="text-green-800 bg-white opacity-50">
                 ▲ {b.type} {b.value ? b.value : ""}
               </p>
             )}
@@ -89,7 +89,7 @@ export const UnitView = (props: { unit: Unit }) => {
         <div class="debuffs">
           <For each={debuffs()}>
             {(b) => (
-              <p class="text-red-800">
+              <p class="text-red-800 bg-white opacity-50">
                 ▼ {b.type} {b.value ? b.value : ""}
               </p>
             )}
@@ -99,7 +99,7 @@ export const UnitView = (props: { unit: Unit }) => {
         <div>
           <For each={statusBuff()}>
             {(b) => (
-              <p class="text-green-800">
+              <p class="text-green-800 bg-white opacity-50">
                 ▲ {b[0]} {b[1]}
               </p>
             )}
@@ -108,7 +108,7 @@ export const UnitView = (props: { unit: Unit }) => {
         <div>
           <For each={statusDebuff()}>
             {(b) => (
-              <p class="text-red-800">
+              <p class="text-red-800 bg-white opacity-50">
                 ▼ {b[0]} {b[1]}
               </p>
             )}
