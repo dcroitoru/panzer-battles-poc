@@ -195,6 +195,21 @@
   height: 32px;
 }
 
+.unit .unit-entrench {
+  position: absolute;
+  bottom: 0;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(190, 108, 0);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  width: 16px;
+  height: 32px;
+}
+
 .unit .unit-id {
   position: absolute;
   bottom: -3px;

@@ -63,6 +63,7 @@ export const UnitView = (props: { unit: Unit }) => {
   const statusBuff = () => status().filter((s) => StatusKind[s[0]] === "buff");
   const statusDebuff = () => status().filter((s) => StatusKind[s[0]] === "debuff");
   const ammo = () => props.unit.ammo;
+  const entrench = () => props.unit.status.get("entrenched");
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
@@ -123,6 +124,9 @@ export const UnitView = (props: { unit: Unit }) => {
       <div class="unit-hp" classList={{ "unit-damaged": damaged() }}>
         {hpStr()}
       </div>
+      <Show when={entrench()}>
+        <div class="unit-entrench">{entrench()}</div>
+      </Show>
     </div>
   );
 };

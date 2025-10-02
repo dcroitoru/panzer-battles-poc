@@ -101,10 +101,13 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
     });
 
     if (target.status.has("entrenched")) {
-      attackValue = 0;
-      let newValue = target.status.get("entrenched")! - 1;
+      const entrenchValue = target.status.get("entrenched")!;
+      const remainingDamage = attackValue > entrenchValue ? attackValue - entrenchValue : 0;
+      const newValue = entrenchValue > attackValue ? entrenchValue - attackValue : 0;
       if (newValue > 0) target.status.set("entrenched", newValue);
       else target.status.delete("entrenched");
+
+      if (remainingDamage > 0) attackValue = remainingDamage;
     }
 
     attackValue = Math.max(attackValue, 0);
