@@ -1,24 +1,27 @@
 .lightTank {
-  background-image: url("assets/icons/tank.png");
+  background-image: url("assets/icons/lightTank.jpg");
 }
 .mediumTank {
-  background-image: url("assets/icons/battle-tank.png");
+  background-image: url("assets/icons/mediumTank.jpg");
+}
+.heavyTank {
+  background-image: url("assets/icons/heavyTank.jpg");
 }
 .mobileAntitank {
-  background-image: url("assets/icons/jeep.png");
+  background-image: url("assets/icons/mobileAntitank.jpg");
 }
 .conscripts {
-  background-image: url("assets/icons/luger.png");
+  background-image: url("assets/icons/conscripts.jpg");
 }
 .fieldMedics {
-  background-image: url("assets/icons/nurse-male.png");
+  background-image: url("assets/icons/fieldMedics.jpg");
 }
 .regulars {
-  background-image: url("assets/icons/thompson-m1.png");
+  background-image: url("assets/icons/regulars.jpg");
 }
 .snipers {
-  background-image: url("assets/icons/headshot.png");
+  background-image: url("assets/icons/snipers.jpg");
 }
 .guards {
-  background-image: url("assets/icons/checked-shield.png");
+  background-image: url("assets/icons/guards.jpg");
 }

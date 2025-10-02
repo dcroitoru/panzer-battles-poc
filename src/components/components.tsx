@@ -56,7 +56,7 @@ export const NoUnitView = () => (
 export const UnitView = (props: { unit: Unit }) => {
   const cdNorm = () => 1 - props.unit.cooldown / props.unit.base.cooldown;
   const damaged = () => props.unit.hp < props.unit.base.hp;
-  const hpStr = () => (props.unit.alive ? props.unit.hp : "💀");
+  const hpStr = () => (props.unit.alive ? "♥︎" + props.unit.hp : "💀");
   const buffs = () => [...props.unit.passives.filter((p) => p.kind === "buff")];
   const debuffs = (): Passive[] => [];
   const status = () => [...props.unit.status];
@@ -64,12 +64,13 @@ export const UnitView = (props: { unit: Unit }) => {
   const statusDebuff = () => status().filter((s) => StatusKind[s[0]] === "debuff");
   const ammo = () => props.unit.ammo;
   const entrench = () => props.unit.status.get("entrenched");
+  const armor = () => props.unit.passives.find((p) => p.type == "armor");
 
   return (
     <div class="unit" classList={{ dead: !props.unit.alive, [props.unit.type]: true }} id={`unit-${props.unit.id}`}>
       <div class="cooldown" style={{ transform: `scaleY(${cdNorm()})` }}></div>
       <p class="font-bold text-md -mt-2 whitespace-nowrap">{props.unit.type}</p>
-      <p class="text-xs">
+      <p class="text-xs text-white">
         🕒 {props.unit.cooldown.toFixed(2)} ({props.unit.base.cooldown.toFixed(2)})
       </p>
       {/* <p>alive: {props.unit.alive.toString()}</p> */}
@@ -119,13 +120,16 @@ export const UnitView = (props: { unit: Unit }) => {
         </Show>
       </div>
 
-      <div class="unit-attack">{props.unit.attack}</div>
+      <div class="unit-attack">🗡{props.unit.attack}</div>
       <div class="unit-id">id: {props.unit.id}</div>
       <div class="unit-hp" classList={{ "unit-damaged": damaged() }}>
         {hpStr()}
       </div>
       <Show when={entrench()}>
         <div class="unit-entrench">{entrench()}</div>
+      </Show>
+      <Show when={armor()}>
+        <div class="unit-armor">⛊{armor()?.value}</div>
       </Show>
     </div>
   );

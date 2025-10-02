@@ -44,7 +44,18 @@ export type Unit = UnitVO & {
   status: StatusMap;
   ammo?: number;
 };
-export const unitTypes = ["noUnit", "regulars", "conscripts", "lightTank", "mediumTank", "mobileAntitank", "fieldMedics", "snipers", "guards"] as const;
+export const unitTypes = [
+  "noUnit",
+  "regulars",
+  "conscripts",
+  "lightTank",
+  "mediumTank",
+  "heavyTank",
+  "mobileAntitank",
+  "fieldMedics",
+  "snipers",
+  "guards",
+] as const;
 export type UnitType = (typeof unitTypes)[number];
 export const UnitBases: Record<UnitType, UnitBase> = {
   noUnit: {
@@ -78,6 +89,13 @@ export const UnitBases: Record<UnitType, UnitBase> = {
     hp: 16,
     cooldown: 4,
     passives: [Passives.Armor(2)],
+  },
+  heavyTank: {
+    type: "heavyTank",
+    attack: 6,
+    hp: 16,
+    cooldown: 5,
+    passives: [Passives.Armor(3)],
   },
   mobileAntitank: {
     type: "mobileAntitank",
