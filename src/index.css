@@ -128,7 +128,7 @@
   padding: 4px;
 
   background-size: cover;
-  filter: brightness(80%);
+  /* filter: brightness(80%); */
 }
 
 .unit.dead {
@@ -242,6 +242,14 @@
 
 .unit .unit-hp.unit-damaged {
   background-color: rgb(122, 3, 3);
+}
+
+.shop-unit.selected {
+  outline: 3px dotted purple;
+}
+
+.shop-unit:hover {
+  outline: 5px solid blue;
 }
 
 .damage-number {
@@ -365,4 +373,9 @@
   border-color: #f66;
   background-color: #f99;
   color: white;
+}
+
+.selected {
+  font-weight: bold;
+  text-decoration: underline;
 }

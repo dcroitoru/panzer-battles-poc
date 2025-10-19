@@ -14,6 +14,12 @@ export const Nav = () => (
           Edit
         </A>
       </li>
+
+      <li class="py-2">
+        <A href="/new-game" class="no-underline hover:underline" activeClass="underline" inactiveClass="default" end>
+          Start a New Game
+        </A>
+      </li>
     </ul>
   </nav>
 );
