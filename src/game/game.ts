@@ -1,6 +1,6 @@
 import { Ability } from "./types/ability";
 import { GameEvent, GameTickEvent } from "./types/events";
-import { GameState, PlayerId } from "./types/types";
+import { GameState, PlayerId } from "./types/game";
 import { createUnit, createUnitId, Position, resetUnitId, Unit, UnitId, UnitType } from "./types/unit";
 import { pickRandom, sortByDistance } from "./util";
 

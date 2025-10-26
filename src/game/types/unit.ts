@@ -1,6 +1,6 @@
 import { Ability, StatusMap, StatusType } from "./ability";
-import { PlayerId } from "./types";
-import { UnitBases } from "./unit-bases";
+import { PlayerId } from "./game";
+import { UnitBases } from "../data/unit-bases";
 
 export type Position = { x: number; y: number };
 

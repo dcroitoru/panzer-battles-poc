@@ -1,4 +1,4 @@
-import { GameState } from "./types/types";
+import { GameState } from "./types/game";
 import { Position, Unit } from "./types/unit";
 
 export const pickRandom = <T>(arr: T[]): T | undefined => {

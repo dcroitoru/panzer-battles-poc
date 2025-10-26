@@ -1,7 +1,7 @@
 import { createInitialState, createTick, tickDelta } from "./src/game/game";
 import { printEvent } from "./src/game/print";
 import { GameTickEvent } from "./src/game/types/events";
-import { GameState } from "./src/game/types/types";
+import { GameState } from "./src/game/types/game";
 import { Unit, UnitType } from "./src/game/types/unit";
 
 const maxTicks = 180;

@@ -1,5 +1,5 @@
 import { For, Show } from "solid-js";
-import { PlayerId, replaySpeedList } from "../game/types/types";
+import { PlayerId, replaySpeedList } from "../game/types/game";
 import {
   enableSounds,
   events,
