@@ -4,8 +4,9 @@ import { createSignal } from "solid-js";
 import { createInitialState, createTick, getUnit } from "../game/game";
 import { initialState, p1, p2, saveInitialStateToLocal } from "./initial";
 import { playAnim, playSounds } from "../anim/anim";
-import { Unit, UnitBase, UnitBases, UnitType } from "../game/types/unit";
+import { Unit, UnitBase, UnitType } from "../game/types/unit";
 import { GameTickEvent } from "../game/types/events";
+import { UnitBases } from "../game/types/unit-bases";
 
 const initialStoreState = [...initialState.units.all.values()];
 export const [units, setUnits] = createSignal(initialStoreState);

@@ -1,7 +1,8 @@
 import { createComputed, createEffect, createSignal, For, Show } from "solid-js";
 import { RoundState } from "../game/types/round";
-import { UnitBase, UnitBases, UnitType } from "../game/types/unit";
+import { UnitBase, UnitType } from "../game/types/unit";
 import { UnitView } from "../components/components";
+import { UnitBases } from "../game/types/unit-bases";
 
 type MetaState = "not-started" | "started" | "ended";
 

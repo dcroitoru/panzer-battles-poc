@@ -1,6 +1,6 @@
-import { Abilities, Ability, StatusMap, StatusType } from "./ability";
-import { Passives } from "./passives";
+import { Ability, StatusMap, StatusType } from "./ability";
 import { PlayerId } from "./types";
+import { UnitBases } from "./unit-bases";
 
 export type Position = { x: number; y: number };
 
@@ -14,13 +14,31 @@ export type Passive = {
   mod?: "attack" | "defense";
 };
 
+export type Rarity = 0 | 1 | 2 | 3 | 4;
+
 export type UnitId = number;
+
+export const unitTypes = [
+  "noUnit",
+  "regulars",
+  "conscripts",
+  "lightTank",
+  "mediumTank",
+  "heavyTank",
+  "mobileAntitank",
+  "fieldMedics",
+  "snipers",
+  "guards",
+] as const;
+
+export type UnitType = (typeof unitTypes)[number];
+
 export type UnitBase = {
   type: UnitType;
   attack: number;
   cooldown: number;
   hp: number;
-  //   rarity: Rarity;
+  rarity: Rarity;
   //   tags: Tag[];
   passives?: Passive[];
   abilities?: Ability[];
@@ -43,89 +61,6 @@ export type Unit = UnitVO & {
   passives: Passive[];
   status: StatusMap;
   ammo?: number;
-};
-export const unitTypes = [
-  "noUnit",
-  "regulars",
-  "conscripts",
-  "lightTank",
-  "mediumTank",
-  "heavyTank",
-  "mobileAntitank",
-  "fieldMedics",
-  "snipers",
-  "guards",
-] as const;
-export type UnitType = (typeof unitTypes)[number];
-export const UnitBases: Record<UnitType, UnitBase> = {
-  noUnit: {
-    type: "noUnit",
-    attack: 0,
-    hp: 0,
-    cooldown: 0,
-  },
-  regulars: {
-    type: "regulars",
-    attack: 4,
-    hp: 20,
-    cooldown: 5, //5
-  },
-  conscripts: {
-    type: "conscripts",
-    attack: 4,
-    hp: 10,
-    cooldown: 5, //5
-  },
-  lightTank: {
-    type: "lightTank",
-    attack: 5,
-    hp: 16, //15
-    cooldown: 4, //6
-    passives: [Passives.Armor(1), Passives.Blitz()],
-  },
-  mediumTank: {
-    type: "mediumTank",
-    attack: 5,
-    hp: 16,
-    cooldown: 4,
-    passives: [Passives.Armor(2)],
-  },
-  heavyTank: {
-    type: "heavyTank",
-    attack: 6,
-    hp: 16,
-    cooldown: 5,
-    passives: [Passives.Armor(3)],
-  },
-  mobileAntitank: {
-    type: "mobileAntitank",
-    attack: 4,
-    hp: 15,
-    cooldown: 7,
-    passives: [Passives.Armor(1), Passives.ArmorPen(), Passives.Ammo(3)],
-  },
-  fieldMedics: {
-    type: "fieldMedics",
-    attack: 0,
-    hp: 10,
-    cooldown: 5, // 5 in spreadsheet
-    abilities: [Abilities.Heal(1)],
-    passives: [],
-  },
-  snipers: {
-    type: "snipers",
-    attack: 4,
-    hp: 20,
-    cooldown: 8,
-    abilities: [Abilities.Expose(1)],
-  },
-  guards: {
-    type: "guards",
-    attack: 2,
-    hp: 30,
-    cooldown: 5,
-    abilities: [Abilities.EntrenchSelf(2)],
-  },
 };
 
 let internalId = 0;
