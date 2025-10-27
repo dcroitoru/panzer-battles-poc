@@ -17,9 +17,9 @@ export type PlayerBoardState = {
 
 export type ShopTier = 1 | 2 | 3 | 4;
 
-export type DraggedUnit = {
+export type BoardItem = {
   type: UnitType;
   parent: string;
   y: number;
   x: number;
-} | null;
+};

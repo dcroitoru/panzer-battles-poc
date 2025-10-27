@@ -1,5 +1,5 @@
 import { createSignal, For, onCleanup, Show } from "solid-js";
-import { DraggedUnit, MainBoardState, PlayerBoardState, RoundState, SideBoardState } from "../game/types/round";
+import { BoardItem, MainBoardState, PlayerBoardState, RoundState, SideBoardState } from "../game/types/round";
 import { UnitBase, UnitType } from "../game/types/unit";
 import { UnitBases } from "../game/data/unit-bases";
 import { getShopTierForRound, rollShopForRound } from "../game/new-game";
@@ -26,29 +26,33 @@ const [playerBoardState, setPlayerBoardState] = createStore<PlayerBoardState>({
 
 const rounds: number[] = Array.from(Array(maxRounds).keys());
 
-const [dragged, setDragged] = createSignal<DraggedUnit>(null);
+const NoItem: BoardItem = { type: "noUnit", parent: "", x: 0, y: 0 };
+const [dragged, setDragged] = createSignal<BoardItem>(NoItem);
 const [pos, setPos] = createSignal<Pos>({ x: 0, y: 0 });
 
-const isDragging = () => dragged() !== null;
+const isDragging = () => dragged() !== NoItem;
+const [shopUsed, setShopUsed] = createSignal(false);
+const isDraggedItem = (item: BoardItem) => {
+  if (item.type == "noUnit") return false;
 
-const startDrag = (d: DraggedUnit) => {
-  console.log("started dragging", d);
-  setDragged(d);
+  const { parent, type, x, y } = dragged();
+  if (item.parent == parent && item.type == type && item.x == x && item.y == y) return true;
+  return false;
 };
-
-const stopDrag = (dd: DraggedUnit) => {
-  console.log("droped on", dd);
-  // if (dd?.parent == "side") {
-  //   updateSide(dd?.type!, dd?.x!);
-  // }
-
-  // if (dd?.parent == "main") {
-  //   updateMain(dd?.type, dd?.y, dd?.x);
-  // }
-  // addUnitToPlayerSideBoard(dragged()?.type!);
-  // updateSide(dragged()?.type!, dd?.x!);
-  setPlayerBoardState("side", dd?.x!, dragged()?.type!);
-  setDragged(null);
+const onDrop = (item: BoardItem) => {
+  console.log("droped on", item);
+  if (item.parent == "side") {
+    if (dragged().parent == "main") setPlayerBoardState("main", dragged().y, dragged().x, item.type);
+    if (dragged().parent == "side") setPlayerBoardState("side", dragged().x, item.type);
+    setPlayerBoardState("side", item.x, dragged().type);
+  }
+  if (item.parent == "main") {
+    if (dragged().parent == "main") setPlayerBoardState("main", dragged().y, dragged().x, item.type);
+    if (dragged().parent == "side") setPlayerBoardState("side", dragged().x, item.type);
+    setPlayerBoardState("main", item.y, item.x, dragged().type);
+  }
+  if (dragged().parent == "shop" && item.parent != "shop") setShopUsed(true);
+  setDragged(NoItem);
 };
 
 // document.onmouseup = (e) => {
@@ -69,23 +73,12 @@ const nextState = () => {
   }
 
   setState((prev) => {
+    setShopUsed(false);
     const round = prev.event === 0 ? prev.round : prev.round + 1;
     const event = prev.event === 0 ? 1 : 0;
     return { ...prev, round, event };
   });
 };
-
-const addUnitToPlayerSideBoard = (type: UnitType) => {
-  // setPlayerBoardState("")
-  // const newState = { ...playerBoardState() };
-  const x = playerBoardState.side.findIndex((el) => el == "noUnit");
-  // newState.side = [...newState.side];
-  // newState.side[pos] = unitType;
-  // setPlayerBoardState(newState);
-  setPlayerBoardState("side", x, type);
-};
-
-// const canAddUnitToPlayerSideBoard = () => playerBoardState().side.findIndex((el) => el == "noUnit") != -1;
 
 const StartNewGameButton = () => (
   <button class="btn-primary" onclick={() => startNewGame()}>
@@ -105,18 +98,14 @@ const NextStateButton = (props: { disabled: boolean }) => (
   </button>
 );
 
-const UnitBaseView = (props: { unitBase: UnitBase; selected: boolean; parent: string; x: number; y: number }) => (
+const BoardItemView = (props: { item: BoardItem; selected: boolean }) => (
   <div
-    data-parent={props.parent}
-    data-x={props.x}
-    data-y={props.y}
-    data-type={props.unitBase.type}
-    class="unit shop-unit cursor-pointer"
-    classList={{ [props.unitBase.type]: true, selected: props.selected }}
-    onPointerDown={() => startDrag({ type: props.unitBase.type, parent: props.parent, x: props.x, y: props.y })}
-    onPointerUp={() => stopDrag({ type: props.unitBase.type, parent: props.parent, x: props.x, y: props.y })}
+    class="unit shop-unit cursor-pointer "
+    classList={{ [props.item.type]: true, selected: props.selected, "opacity-50": isDraggedItem(props.item) }}
+    onPointerDown={() => setDragged(props.item)}
+    onPointerUp={() => onDrop(props.item)}
   >
-    <p class="font-bold text-md -mt-2 whitespace-nowrap select-none">{props.unitBase.type}</p>
+    <p class="font-bold text-md -mt-2 whitespace-nowrap select-none">{props.item.type}</p>
   </div>
 );
 
@@ -127,12 +116,12 @@ const PlayerBoardStateScreen = (props: { boardState: PlayerBoardState }) => (
       <div class="flex flex-col gap-4">
         <div class="flex flex-row gap-4">
           <For each={props.boardState.main[0]}>
-            {(u, x) => <UnitBaseView unitBase={UnitBases[u]} selected={false} parent="main" y={0} x={x()}></UnitBaseView>}
+            {(u, x) => <BoardItemView item={{ parent: "main", type: u, y: 0, x: x() }} selected={false}></BoardItemView>}
           </For>
         </div>
         <div class="flex flex-row gap-4">
           <For each={props.boardState.main[1]}>
-            {(u, x) => <UnitBaseView unitBase={UnitBases[u]} selected={false} parent="main" y={1} x={x()}></UnitBaseView>}
+            {(u, x) => <BoardItemView item={{ parent: "main", type: u, y: 1, x: x() }} selected={false}></BoardItemView>}
           </For>
         </div>
       </div>
@@ -141,7 +130,7 @@ const PlayerBoardStateScreen = (props: { boardState: PlayerBoardState }) => (
     <div>
       <h3>Side</h3>
       <div class="flex flex-row gap-4">
-        <For each={props.boardState.side}>{(u, x) => <UnitBaseView unitBase={UnitBases[u]} selected={false} parent="side" y={0} x={x()}></UnitBaseView>}</For>
+        <For each={props.boardState.side}>{(u, x) => <BoardItemView item={{ parent: "side", type: u, y: 0, x: x() }} selected={false}></BoardItemView>}</For>
       </div>
     </div>
   </div>
@@ -150,40 +139,25 @@ const PlayerBoardStateScreen = (props: { boardState: PlayerBoardState }) => (
 const ShopScreen = (props: { round: number }) => {
   const choices = rollShopForRound(props.round);
   const [choice, setChoice] = createSignal<UnitType>("noUnit");
-  const [confirmed, setConfirmed] = createSignal(false);
-  const confirmDisabled = () => choice() === "noUnit";
-  const nextDisabled = () => confirmDisabled() || confirmed() == false;
+  const nextDisabled = () => shopUsed() == false;
   const shopTier = () => getShopTierForRound(props.round);
-  const onConfirm = () => {
-    addUnitToPlayerSideBoard(choice());
-    setConfirmed(true);
-  };
-  // const boardIsFull = () => !canAddUnitToPlayerSideBoard();
-  const boardIsFull = () => false;
+
   return (
     <div class="bg-green-200 p-2">
       <h3>Shop (Tier {shopTier()})</h3>
 
-      <Show when={confirmed() == false}>
+      <Show when={shopUsed() == false}>
         <p>Choose one</p>
 
         <div class="flex flex-row gap-4" classList={{ disabled: true }}>
           <For each={choices}>
             {(c, x) => (
               <div onclick={() => setChoice(c)}>
-                <UnitBaseView unitBase={UnitBases[c]} selected={c === choice()} parent="shop" y={0} x={x()}></UnitBaseView>
+                <BoardItemView selected={c === choice()} item={{ parent: "shop", type: c, y: 0, x: x() }}></BoardItemView>
               </div>
             )}
           </For>
         </div>
-
-        <button class="btn-primary mt-4" disabled={confirmDisabled()} onClick={onConfirm}>
-          Confirm
-        </button>
-
-        <Show when={boardIsFull()}>
-          <p class="bold text-red-800 mt-4">Player side board full! (Move to main or sell smth.)</p>
-        </Show>
       </Show>
 
       <div class="mt-4">
@@ -229,10 +203,7 @@ export const CreateDraggedUnit = () => {
   );
 };
 
-const unitClass = (d: DraggedUnit) => {
-  if (d == null) return {};
-  return { [d.type]: true };
-};
+const unitClass = (i: BoardItem) => ({ [i.type]: true });
 
 export const NewGame = () => {
   let containerRef;
@@ -242,14 +213,9 @@ export const NewGame = () => {
 
   const updatePos = (e: PointerEvent) => {
     if (!containerRef) return;
-
-    // Get container's box (accounts for padding & borders, not margins)
-    const rect = (containerRef as HTMLElement).getBoundingClientRect();
-
     // Cursor position relative to container
-    const x = e.clientX - rect.left - 32;
-    const y = e.clientY - rect.top - 32;
-
+    const x = e.clientX; // - rect.left - 32;
+    const y = e.clientY; // - rect.top - 32;
     setPos({ x, y });
   };
 
@@ -261,14 +227,11 @@ export const NewGame = () => {
 
   return (
     <section class="container mx-auto select-none" ref={containerRef}>
-      <div>
-        Side:
-        <For each={playerBoardState.side}>{(u) => <p>{u}</p>}</For>
-      </div>
-
       <h3>Play new game</h3>
 
-      <div>meta state: {metaState()}</div>
+      <div>
+        State: <b>{metaState()}</b>
+      </div>
 
       <Show when={metaState() === "not-started"}>
         <StartNewGameButton />
@@ -320,7 +283,7 @@ export const NewGame = () => {
 if (!(document as any).flag) {
   document.addEventListener("pointerup", (e) => {
     setTimeout(() => {
-      setDragged(null);
+      setDragged(NoItem);
     }, 10);
   });
 }
