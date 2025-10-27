@@ -1,4 +1,4 @@
-import { Unit, UnitBase } from "./unit";
+import { Unit, UnitBase, UnitType } from "./unit";
 
 export const EventTypes = ["shop", "battle"] as const;
 export type EventType = (typeof EventTypes)[number];
@@ -8,7 +8,18 @@ export type RoundState = {
   event: number;
 };
 
+export type MainBoardState = UnitType[][];
+export type SideBoardState = UnitType[];
 export type PlayerBoardState = {
-  main: Unit[][];
-  side: Unit[];
+  main: MainBoardState;
+  side: SideBoardState;
 };
+
+export type ShopTier = 1 | 2 | 3 | 4;
+
+export type DraggedUnit = {
+  type: UnitType;
+  parent: string;
+  y: number;
+  x: number;
+} | null;
