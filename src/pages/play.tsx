@@ -1,5 +1,5 @@
-import { For, Show } from "solid-js";
-import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, ShowEventsLog } from "../components/components";
+// import { For, Show } from "solid-js";
+// import { PlaySounds, PlayStopBtn, ReplayEvents, ReplaySpeed, ShowEventsLog } from "../components/components";
 // import { isPlaying, maxTicks, showEvents, store } from "../store/store";
 
 // export function Play() {
