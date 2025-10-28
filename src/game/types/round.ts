@@ -5,7 +5,7 @@ export type EventType = (typeof EventTypes)[number];
 
 export type RoundState = {
   round: number;
-  event: number;
+  event: "shop" | "battle";
 };
 
 export type MainBoardState = UnitType[][];

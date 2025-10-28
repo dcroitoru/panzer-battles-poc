@@ -6,6 +6,8 @@ import { getShopTierForRound, rollShopForRound } from "../game/new-game";
 import { Pos } from "./edit";
 import { runWithOwner, getOwner } from "solid-js";
 import { createStore } from "solid-js/store";
+import { PlayBattle } from "../components/play-battle";
+import { getEnemyBoardStateForRound } from "../game/data/enemy-board-data";
 
 type MetaState = "not-started" | "started" | "ended";
 
@@ -13,7 +15,7 @@ const startingFame = 5;
 const maxRounds = 10;
 const [metaState, setMetaState] = createSignal<MetaState>("not-started");
 const [fame, setFame] = createSignal(startingFame);
-const [state, setState] = createSignal<RoundState>({ round: 0, event: 0 });
+const [state, setState] = createSignal<RoundState>({ round: 0, event: "shop" });
 const initialMainBoardState: MainBoardState = [
   ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
   ["noUnit", "noUnit", "noUnit", "noUnit", "noUnit"],
@@ -55,27 +57,21 @@ const onDrop = (item: BoardItem) => {
   setDragged(NoItem);
 };
 
-// document.onmouseup = (e) => {
-//   setTimeout(() => {
-//     setDragged(null);
-//   }, 10);
-// };
-
 const startNewGame = () => {
-  setState({ round: 0, event: 0 });
+  setState({ round: 0, event: "shop" });
   setMetaState("started");
 };
 
 const nextState = () => {
-  if (state().round === maxRounds - 1 && state().event === 1) {
+  if (state().round === maxRounds - 1 && state().event === "battle") {
     setMetaState("ended");
     return;
   }
 
   setState((prev) => {
     setShopUsed(false);
-    const round = prev.event === 0 ? prev.round : prev.round + 1;
-    const event = prev.event === 0 ? 1 : 0;
+    const round = prev.event === "shop" ? prev.round : prev.round + 1;
+    const event = prev.event === "shop" ? "battle" : "shop";
     return { ...prev, round, event };
   });
 };
@@ -167,27 +163,27 @@ const ShopScreen = (props: { round: number }) => {
   );
 };
 
-const BattleScreen = () => {
-  const [battleEnded, setBattleEnded] = createSignal(false);
-  const nextDisabled = () => battleEnded() === false;
+// const BattleScreen = () => {
+//   const [battleEnded, setBattleEnded] = createSignal(false);
+//   const nextDisabled = () => battleEnded() === false;
 
-  return (
-    <div class="bg-blue-200">
-      <h3>Battle</h3>
-      <div>Should show both sides here</div>
+//   return (
+//     <div class="bg-blue-200">
+//       <h3>Battle</h3>
+//       <div>Should show both sides here</div>
 
-      <div class="inline-flex flex-col gap-4">
-        <button class="btn-primary" onclick={() => setBattleEnded(true)}>
-          Simulate end battle
-        </button>
+//       <div class="inline-flex flex-col gap-4">
+//         <button class="btn-primary" onclick={() => setBattleEnded(true)}>
+//           Simulate end battle
+//         </button>
 
-        <Show when={battleEnded()}>Somebody won!</Show>
+//         <Show when={battleEnded()}>Somebody won!</Show>
 
-        <NextStateButton disabled={nextDisabled()}></NextStateButton>
-      </div>
-    </div>
-  );
-};
+//         <NextStateButton disabled={nextDisabled()}></NextStateButton>
+//       </div>
+//     </div>
+//   );
+// };
 
 export const CreateDraggedUnit = () => {
   return (
@@ -254,17 +250,18 @@ export const NewGame = () => {
         </div>
 
         <div class="flex flex-row gap-4 bg-amber-100">
-          <div classList={{ selected: state().event === 0 }}>Shop</div>
-          <div classList={{ selected: state().event === 1 }}>Battle</div>
+          <div classList={{ selected: state().event === "shop" }}>Shop</div>
+          <div classList={{ selected: state().event === "battle" }}>Battle</div>
         </div>
 
-        <Show when={state().event === 0}>
+        <Show when={state().event === "shop"}>
           <ShopScreen round={state().round}></ShopScreen>
           <PlayerBoardStateScreen boardState={playerBoardState}></PlayerBoardStateScreen>
         </Show>
 
-        <Show when={state().event === 1}>
-          <BattleScreen></BattleScreen>
+        <Show when={state().event === "battle"}>
+          <PlayBattle playerBord={playerBoardState.main} enemyBoard={getEnemyBoardStateForRound(state().round)} onNext={() => nextState()}></PlayBattle>
+          {/* <BattleScreen></BattleScreen> */}
         </Show>
       </Show>
 

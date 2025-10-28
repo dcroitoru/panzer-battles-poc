@@ -8,15 +8,15 @@ import { NewGame } from "./pages/newGame";
 export const routes: RouteDefinition[] = [
   {
     path: "/",
+    component: NewGame,
+  },
+  {
+    path: "/simulate",
     component: Play,
   },
   {
     path: "/edit",
     component: Edit,
-  },
-  {
-    path: "/new-game",
-    component: NewGame,
   },
   {
     path: "**",
