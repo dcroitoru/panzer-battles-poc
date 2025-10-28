@@ -1,7 +1,8 @@
 import { createSignal } from "solid-js";
-import { PlayerBoardState, ShopTier } from "./types/round";
-import { createUnit, Unit, UnitBase, UnitType } from "./types/unit";
+import { MainBoardState, MainBoardUnits, PlayerBoardState, PlayerType, ShopTier } from "./types/round";
+import { createUnit, createUnitId, Unit, UnitBase, UnitType } from "./types/unit";
 import { UnitBases } from "./data/unit-bases";
+import { PlayerId } from "./types/game";
 
 export const getShopTierForRound = (round: number): ShopTier => {
   if (round >= 7) return 4;
@@ -17,3 +18,8 @@ export const rollShopForRound = (round: number): UnitType[] => {
   if (tier == 2) return ["guards", "lightTank", "mobileAntitank"];
   return ["regulars", "fieldMedics", "lightTank"];
 };
+
+export const createUnits = (board: MainBoardState, owner: PlayerId): Unit[] => [
+  ...board[0].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 0 })),
+  ...board[1].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 1 })),
+];

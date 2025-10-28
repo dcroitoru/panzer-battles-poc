@@ -9,7 +9,7 @@ export const Nav = () => (
         </A>
       </li>
 
-      <li class="py-2">
+      {/* <li class="py-2">
         <A href="/simulate" class="no-underline hover:underline" activeClass="underline" inactiveClass="default" end>
           Play
         </A>
@@ -19,7 +19,7 @@ export const Nav = () => (
         <A href="/edit" class="no-underline hover:underline" activeClass="underline" inactiveClass="default" end>
           Edit
         </A>
-      </li>
+      </li> */}
     </ul>
   </nav>
 );

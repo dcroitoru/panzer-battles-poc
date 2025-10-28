@@ -6,8 +6,9 @@ import { pickRandom, sortByDistance } from "./util";
 
 export const tickDelta = 0.25;
 
-const aliveUnits = (state: GameState) => [...state.units.all.values().filter((u) => u.alive)];
-const blitzUnits = (state: GameState) => aliveUnits(state).filter((u) => u.passives.findIndex((p) => p.type === "blitz") != -1);
+const allUnits = (state: GameState) => [...state.playerUnits, ...state.enemyUnits];
+const aliveUnits = (state: GameState) => allUnits(state).filter((u) => u.alive);
+const blitzUnits = (state: GameState) => allUnits(state).filter((u) => u.passives.findIndex((p) => p.type === "blitz") != -1);
 
 export const createTick = (state: GameState): { state: GameState; event: GameTickEvent } => {
   if (state.gameplayState === "not-started")
@@ -25,8 +26,8 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
       event: { tick: state.tick, events: [{ type: "gameEnd" }] },
     };
 
-  const p1alive = alive.filter((u) => u.ownerId === 0);
-  const p2alive = alive.filter((u) => u.ownerId === 1);
+  const p1alive = alive.filter((u) => u.ownerId === "player");
+  const p2alive = alive.filter((u) => u.ownerId === "enemy");
   if (p1alive.length === 0)
     return {
       state: { ...state, gameplayState: "ended", outcome: "player-1-wins" },
@@ -47,7 +48,7 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
     // Activate blitz units
     blitzUnits(state).forEach((u) => {
       // This is repeated code!
-      const target = acquireTarget(u, state);
+      const target = acquireTarget(state, u);
       let attackValue = u.attack;
 
       target.passives.forEach((p) => {
@@ -87,7 +88,7 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
       u.ammo -= 1;
     }
 
-    const target = acquireTarget(u, state);
+    const target = acquireTarget(state, u);
     // should apply status effects here
     // attack
     let attackValue = u.attack;
@@ -134,23 +135,23 @@ export const createTick = (state: GameState): { state: GameState; event: GameTic
   return { state: { ...state, tick }, event };
 };
 
-export const getTargetPlayerId = (unit: Unit): PlayerId => (unit.ownerId === 0 ? 1 : 0);
+export const getTargetPlayerId = (unit: Unit): PlayerId => unit.ownerId;
 export const playerUnits = (id: PlayerId) => (u: Unit) => u.ownerId === id;
-export const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
-export const getEnemyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(getTargetPlayerId(unit), state);
-export const getAllyUnits = (unit: Unit, state: GameState): Unit[] => getPlayerUnits(unit.ownerId, state);
+// export const getPlayerUnits = (playerId: PlayerId, state: GameState): Unit[] => state.units[playerId].map((id) => state.units.all.get(id)!);
+export const getAdverseUnits = (state: GameState, player: PlayerId): Unit[] => (player === "player" ? state.enemyUnits : state.playerUnits);
+export const getAllyUnits = (state: GameState, player: PlayerId): Unit[] => (player === "player" ? state.playerUnits : state.enemyUnits);
 
-const acquireTarget = (unit: Unit, state: GameState): Unit => {
-  return pickClosestEnemy(unit, state);
+const acquireTarget = (state: GameState, unit: Unit): Unit => {
+  return pickClosestAdverseUnit(state, unit);
 };
 
-const pickClosestEnemy = (unit: Unit, state: GameState): Unit => {
-  const enemyUnits = getEnemyUnits(unit, state);
-  return enemyUnits.filter((u) => u.alive).sort(sortByDistance(unit))[0];
+const pickClosestAdverseUnit = (state: GameState, unit: Unit): Unit => {
+  const units = getAdverseUnits(state, unit.ownerId);
+  return units.filter((u) => u.alive).sort(sortByDistance(unit))[0];
 };
 
 const posEquals = (a: Position) => (b: Position) => a.x === b.x && a.y === b.y;
-export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;
+// export const getUnit = (id: UnitId, state: GameState) => state.units.all.get(id)!;
 export const getAdjacent = (unit: Unit, state: GameState): Unit[] => {
   const pos = unit.position;
   const N = { x: pos.x, y: pos.y - 1 };
@@ -158,28 +159,28 @@ export const getAdjacent = (unit: Unit, state: GameState): Unit[] => {
   const S = { x: pos.x, y: pos.y + 1 };
   const W = { x: pos.x - 1, y: pos.y };
   const coords = [N, E, S, W];
-  return getAllyUnits(unit, state)
+  return getAllyUnits(state, unit.ownerId)
     .filter((u) => u.alive)
     .filter((u) => coords.filter(posEquals(u.position)).length);
 };
 
-export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
-  resetUnitId();
-  const p1 = u1.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 0, { x, y })));
-  const p2 = u2.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 1, { x, y })));
-  // const p2 = u2.map((t, i) => createUnit(createUnitId(), t, 1, { x: i, y: 0 }));
-  const all = new Map([...p1.flat(), ...p2.flat()].map((u) => [u.id, u]));
-  return {
-    gameplayState: "not-started",
-    tick: 0,
-    outcome: "no-outcome",
-    units: {
-      all,
-      0: p1.flat().map((u) => u.id),
-      1: p2.flat().map((u) => u.id),
-    },
-  };
-};
+// export const createInitialState = (u1: UnitType[][], u2: UnitType[][]): GameState => {
+//   resetUnitId();
+//   const p1 = u1.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 0, { x, y })));
+//   const p2 = u2.map((row, y) => row.map((t, x) => createUnit(createUnitId(), t, 1, { x, y })));
+//   // const p2 = u2.map((t, i) => createUnit(createUnitId(), t, 1, { x: i, y: 0 }));
+//   const all = new Map([...p1.flat(), ...p2.flat()].map((u) => [u.id, u]));
+//   return {
+//     gameplayState: "not-started",
+//     tick: 0,
+//     outcome: "no-outcome",
+//     units: {
+//       all,
+//       0: p1.flat().map((u) => u.id),
+//       1: p2.flat().map((u) => u.id),
+//     },
+//   };
+// };
 
 const useAbility = (ability: Ability, source: Unit, target: Unit, state: GameState): GameEvent | undefined => {
   switch (ability.type) {

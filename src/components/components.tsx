@@ -1,51 +1,52 @@
 import { For, Show } from "solid-js";
 import { PlayerId, replaySpeedList } from "../game/types/game";
-import {
-  enableSounds,
-  events,
-  isPlaying,
-  onSpeedChange,
-  play,
-  setEnableSounds,
-  setShowEvents,
-  showEvents,
-  speed,
-  stop,
-  store,
-  tickDelta,
-  units,
-} from "../store/store";
-import { Passive, Unit, UnitBases, unitTypes } from "../game/types/unit";
+// import {
+//   enableSounds,
+//   events,
+//   isPlaying,
+//   onSpeedChange,
+//   play,
+//   setEnableSounds,
+//   setShowEvents,
+//   showEvents,
+//   speed,
+//   stop,
+//   store,
+//   tickDelta,
+//   units,
+// } from "../store/store";
+import { Passive, Unit, unitTypes } from "../game/types/unit";
 import { playerUnits } from "../game/game";
 import { printHtmlEvent } from "../game/printEvents";
 import { StatusKind } from "../game/types/ability";
+import { MainBoardState, MainBoardUnits } from "../game/types/round";
 
-export const ReplaySpeed = () => (
-  <div class="flex flex-row gap-4">
-    Speed:
-    <For each={replaySpeedList}>
-      {(sp) => (
-        <label>
-          <input type="radio" name="replaySpeed" checked={sp === speed()} onChange={() => onSpeedChange(sp)}></input> {sp}
-        </label>
-      )}
-    </For>
-  </div>
-);
+// export const ReplaySpeed = () => (
+//   <div class="flex flex-row gap-4">
+//     Speed:
+//     <For each={replaySpeedList}>
+//       {(sp) => (
+//         <label>
+//           <input type="radio" name="replaySpeed" checked={sp === speed()} onChange={() => onSpeedChange(sp)}></input> {sp}
+//         </label>
+//       )}
+//     </For>
+//   </div>
+// );
 
-export const PlaySounds = () => (
-  <div>
-    <label>
-      Play sounds <input type="checkbox" checked={enableSounds()} onChange={() => setEnableSounds((prev) => !prev)}></input>
-    </label>
-  </div>
-);
+// export const PlaySounds = () => (
+//   <div>
+//     <label>
+//       Play sounds <input type="checkbox" checked={enableSounds()} onChange={() => setEnableSounds((prev) => !prev)}></input>
+//     </label>
+//   </div>
+// );
 
-export const ShowEventsLog = () => (
-  <label>
-    Show Events Log <input type="checkbox" checked={showEvents()} onChange={() => setShowEvents((prev) => !prev)}></input>
-  </label>
-);
+// export const ShowEventsLog = () => (
+//   <label>
+//     Show Events Log <input type="checkbox" checked={showEvents()} onChange={() => setShowEvents((prev) => !prev)}></input>
+//   </label>
+// );
 
 export const NoUnitView = () => (
   <div class="unit noUnit">
@@ -135,71 +136,86 @@ export const UnitView = (props: { unit: Unit }) => {
   );
 };
 
-export const Units = (props: { playerId: PlayerId }) => {
-  const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
-  // const unitsArr = () => units().filter(playerUnits(props.playerId));
-  // const [reorient, setReorient] = createSignal(false);
-  const reorient = () => props.playerId === 0;
-  const isWinner = () => store.outcome === `player-${props.playerId}-wins`;
+// export const Units = (props: { playerId: PlayerId }) => {
+//   const unitsArr = () => (props.playerId === 0 ? units().filter(playerUnits(props.playerId)).reverse() : units().filter(playerUnits(props.playerId)));
+//   // const unitsArr = () => units().filter(playerUnits(props.playerId));
+//   // const [reorient, setReorient] = createSignal(false);
+//   const reorient = () => props.playerId === 0;
+//   const isWinner = () => store.outcome === `player-${props.playerId}-wins`;
 
+//   return (
+//     <div>
+//       <h3>
+//         Player {props.playerId} Units
+//         <Show when={isWinner()}> - Winner! - 🐐🏆🐐 </Show>
+//       </h3>
+//       {/* <Show when={props.playerId == 0}>
+//         <label class="block">
+//           <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
+//           Orient upside down
+//         </label>
+//       </Show> */}
+
+//       <div class="flex flex-row gap-4">
+//         <div class="units-container">
+//           <For each={unitsArr()}>{(u) => (u.type === "noUnit" ? <NoUnitView></NoUnitView> : <UnitView unit={u}></UnitView>)}</For>
+//         </div>
+
+//         <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
+//           <div class="h-[120px] grid items-center font-bold">Front</div>
+//           <div class="h-[120px] grid items-center font-bold">Support</div>
+//           <div class="h-[120px] grid items-center font-bold">Back</div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export const PlayStopBtn = () => (
+//   <div>
+//     <Show when={isPlaying()}>
+//       <button class="btn-primary" onClick={() => stop()}>
+//         Stop
+//       </button>
+//     </Show>
+
+//     <Show when={!isPlaying()}>
+//       <button class="btn-primary" onClick={() => play()}>
+//         Play
+//       </button>
+//     </Show>
+//   </div>
+// );
+
+// export const ReplayEvents = () => {
+//   return (
+//     <div>
+//       <h1>Events</h1>
+//       <For each={events().filter((e) => e.events.length > 0)}>
+//         {(e) => (
+//           <div class="mt-4">
+//             <p class="text-gray-500 text-sm">
+//               Tick: {e.tick} ({e.tick * tickDelta}s)
+//             </p>
+//             <For each={e.events}>{(ev) => <p innerHTML={printHtmlEvent(ev, store)}></p>}</For>
+//           </div>
+//         )}
+//       </For>
+//     </div>
+//   );
+// };
+
+export const PlayerBoard = (props: { units: MainBoardUnits; isEnemy?: boolean }) => {
   return (
     <div>
-      <h3>
-        Player {props.playerId} Units
-        <Show when={isWinner()}> - Winner! - 🐐🏆🐐 </Show>
-      </h3>
-      {/* <Show when={props.playerId == 0}>
-        <label class="block">
-          <input type="checkbox" checked={reorient()} onChange={() => setReorient((prev) => !prev)}></input>
-          Orient upside down
-        </label>
-      </Show> */}
-
-      <div class="flex flex-row gap-4">
-        <div class="units-container">
-          <For each={unitsArr()}>{(u) => (u.type === "noUnit" ? <NoUnitView></NoUnitView> : <UnitView unit={u}></UnitView>)}</For>
-        </div>
-
-        <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": reorient() }}>
-          <div class="h-[120px] grid items-center font-bold">Front</div>
-          <div class="h-[120px] grid items-center font-bold">Support</div>
-          <div class="h-[120px] grid items-center font-bold">Back</div>
-        </div>
+      <div>
+        <For each={props.units[0]}>{(u) => <UnitView unit={u}></UnitView>}</For>
+        <div>Front</div>
       </div>
-    </div>
-  );
-};
-
-export const PlayStopBtn = () => (
-  <div>
-    <Show when={isPlaying()}>
-      <button class="btn-primary" onClick={() => stop()}>
-        Stop
-      </button>
-    </Show>
-
-    <Show when={!isPlaying()}>
-      <button class="btn-primary" onClick={() => play()}>
-        Play
-      </button>
-    </Show>
-  </div>
-);
-
-export const ReplayEvents = () => {
-  return (
-    <div>
-      <h1>Events</h1>
-      <For each={events().filter((e) => e.events.length > 0)}>
-        {(e) => (
-          <div class="mt-4">
-            <p class="text-gray-500 text-sm">
-              Tick: {e.tick} ({e.tick * tickDelta}s)
-            </p>
-            <For each={e.events}>{(ev) => <p innerHTML={printHtmlEvent(ev, store)}></p>}</For>
-          </div>
-        )}
-      </For>
+      <div>
+        <For each={props.units[1]}>{(u) => <UnitView unit={u}></UnitView>}</For>
+        <div>Support</div>
+      </div>
     </div>
   );
 };

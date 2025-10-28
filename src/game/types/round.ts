@@ -23,3 +23,7 @@ export type BoardItem = {
   y: number;
   x: number;
 };
+
+export type PlayerType = "player" | "enemy";
+
+export type MainBoardUnits = Unit[][];
