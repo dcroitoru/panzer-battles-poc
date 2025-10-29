@@ -1,19 +1,29 @@
 import { MainBoardState } from "../game/types/round";
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import { Unit } from "../game/unit";
 import { NoUnitView, UnitView } from "./components";
-import { createInitialGameState, createNextGameTick, GameState, PlayerId } from "../game/game";
+import { createInitialGameState, createNextGameTick, GameState, Outcome, PlayerId } from "../game/game";
 import { playAnims, playSounds } from "../anim/anim";
 
 const getUnitView = (u: Unit) => (u.base.type == "noUnit" ? <NoUnitView /> : <UnitView unit={u} />);
 
-const PlayerBoard = (props: { units: Unit[]; owner: PlayerId }) => {
+const PlayerBoard = (props: { units: Unit[]; owner: PlayerId; winner: boolean }) => {
   return (
     <div>
-      <h3>Owner: {props.owner}</h3>
+      <h3>
+        Board: {props.owner}
+        <Show when={props.winner}> - Winner! - 🐐🏆🐐 </Show>
+      </h3>
 
-      <div class="units-container">
-        <For each={props.owner === "enemy" ? [...props.units].reverse() : props.units}>{getUnitView}</For>
+      <div class="flex flex-row gap-4">
+        <div class="units-container">
+          <For each={props.owner === "enemy" ? [...props.units].reverse() : props.units}>{getUnitView}</For>
+        </div>
+
+        <div class="flex flex-col gap-8" classList={{ "flex-col-reverse": props.owner === "enemy" }}>
+          <div class="h-[120px] grid items-center font-bold">Front</div>
+          <div class="h-[120px] grid items-center font-bold">Support</div>
+        </div>
       </div>
     </div>
   );
@@ -65,8 +75,10 @@ export const PlayBattle = (props: { playerBord: MainBoardState; enemyBoard: Main
       <div>Play state: {gameState().playState}</div>
       <div>Outcome: {gameState().outcome}</div>
 
-      <PlayerBoard units={enemyUnits()} owner="enemy"></PlayerBoard>
-      <PlayerBoard units={playerUnits()} owner="player"></PlayerBoard>
+      <div class="flex flex-col gap-16">
+        <PlayerBoard units={enemyUnits()} owner="enemy" winner={gameState().outcome === "enemy-wins"}></PlayerBoard>
+        <PlayerBoard units={playerUnits()} owner="player" winner={gameState().outcome === "player-wins"}></PlayerBoard>
+      </div>
     </div>
   );
 };
