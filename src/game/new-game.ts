@@ -21,6 +21,6 @@ export const rollShopForRound = (round: number): UnitType[] => {
 };
 
 export const createUnits = (board: MainBoardState, owner: PlayerId): Unit[] => [
-  ...board[0].filter((t) => t != "noUnit").map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 0 })),
-  ...board[1].filter((t) => t != "noUnit").map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 1 })),
+  ...board[0].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 0 })),
+  ...board[1].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 1 })),
 ];

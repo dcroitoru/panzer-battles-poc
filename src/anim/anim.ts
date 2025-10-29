@@ -1,4 +1,4 @@
-import { GameEvent, GameTickEvent } from "../game/types/events";
+import { GameEvent } from "../game/types/events";
 import { Unit, UnitId } from "../game/unit";
 
 import shot1 from "../assets/audio/shot-1.mp3";
@@ -133,9 +133,9 @@ export const playHealAnim = (unitId: UnitId, value: number) => {
   }, 1000);
 };
 
-export const playSounds = (event: GameTickEvent) => {
+export const playSounds = (events: GameEvent[]) => {
   // Shot sound
-  if (event.events.findIndex((ge) => ge.type === "unitAttack") !== -1) {
+  if (events.find((ge) => ge.type === "unitAttack")) {
     playShotSound();
   }
 };
@@ -148,3 +148,5 @@ export const playShotSound = () => {
   audio.volume = 0.05;
   audio.play();
 };
+
+export const playAnims = (events: GameEvent[]) => events.forEach(playAnim);
