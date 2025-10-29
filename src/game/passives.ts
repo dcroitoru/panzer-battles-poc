@@ -1,5 +1,12 @@
-import { Passive } from "./unit";
-
+export type PassiveKind = "buff" | "debuff" | "other";
+export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted" | "ammo";
+export type Passive = {
+  type: PassiveType;
+  kind: PassiveKind;
+  value?: number;
+  consumable?: boolean;
+  mod?: "attack" | "defense";
+};
 export const Passives = {
   Armor: (value: number): Passive => ({ type: "armor", value, kind: "buff", mod: "defense" }),
   ArmorPen: (): Passive => ({ type: "armor-pen", kind: "buff", mod: "attack" }),

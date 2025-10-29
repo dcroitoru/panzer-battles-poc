@@ -1,5 +1,5 @@
 // import { createInitialState } from "../game/game";
-import { UnitType } from "../game/types/unit";
+import { UnitType } from "../game/unit";
 
 // export const p1 = [
 //   ["mobileAntitank", "mobileAntitank", "conscripts", "lightTank", "conscripts"],

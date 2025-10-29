@@ -1,6 +1,6 @@
-import { Abilities } from "../types/ability";
-import { Passives } from "../types/passives";
-import { UnitBase, UnitType } from "../types/unit";
+import { Abilities } from "../ability";
+import { Passives } from "../passives";
+import { UnitBase, UnitType } from "../unit";
 
 const UnitBasesData: UnitBase[] = [
   {

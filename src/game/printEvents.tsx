@@ -1,7 +1,7 @@
 import { getUnit } from "./game";
 import { GameEvent } from "./types/events";
 import { GameState, PlayerId } from "./types/game";
-import { Unit } from "./types/unit";
+import { Unit } from "./unit";
 
 const col = (id: PlayerId) => (str: string) => `<b class="color-${id}"}>${str}</b>`;
 const htmlUnitName = (u: Unit) => col(u.ownerId)(`${u.type} (${u.id})`);

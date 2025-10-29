@@ -1,4 +1,4 @@
-import { Unit, UnitBase, UnitType } from "./unit";
+import { Unit, UnitBase, UnitType } from "../unit";
 
 export const EventTypes = ["shop", "battle"] as const;
 export type EventType = (typeof EventTypes)[number];

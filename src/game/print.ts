@@ -1,7 +1,7 @@
 import { getUnit } from "./game";
 import { GameEvent } from "./types/events";
 import { GameState, PlayerId } from "./types/game";
-import { Unit } from "./types/unit";
+import { Unit } from "./unit";
 
 const unitName = (unit: Unit): string => `P${unit.ownerId}:${unit.type} (${unit.id})`;
 

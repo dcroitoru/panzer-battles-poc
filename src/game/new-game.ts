@@ -1,8 +1,6 @@
-import { createSignal } from "solid-js";
-import { MainBoardState, MainBoardUnits, PlayerBoardState, PlayerType, ShopTier } from "./types/round";
-import { createUnit, createUnitId, Unit, UnitBase, UnitType } from "./types/unit";
-import { UnitBases } from "./data/unit-bases";
-import { PlayerId } from "./types/game";
+import { MainBoardState, ShopTier } from "./types/round";
+import { createUnit, createUnitId, Unit, UnitType } from "./unit";
+import { PlayerId } from "./game";
 
 export const getShopTierForRound = (round: number): ShopTier => {
   if (round >= 7) return 4;
@@ -11,6 +9,9 @@ export const getShopTierForRound = (round: number): ShopTier => {
   return 1;
 };
 
+// TODO: This should be random
+// Add more unit bases with varying rarities and implement proper shop
+// Add ability to reroll shop (once?)
 export const rollShopForRound = (round: number): UnitType[] => {
   const tier = getShopTierForRound(round);
   if (tier == 4) return ["lightTank", "mediumTank", "heavyTank"];
@@ -20,6 +21,6 @@ export const rollShopForRound = (round: number): UnitType[] => {
 };
 
 export const createUnits = (board: MainBoardState, owner: PlayerId): Unit[] => [
-  ...board[0].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 0 })),
-  ...board[1].map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 1 })),
+  ...board[0].filter((t) => t != "noUnit").map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 0 })),
+  ...board[1].filter((t) => t != "noUnit").map((t, x) => createUnit(createUnitId(), t, owner, { x, y: 1 })),
 ];

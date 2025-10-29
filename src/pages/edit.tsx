@@ -2,7 +2,7 @@ import { createSignal, For, onCleanup, Show, Suspense } from "solid-js";
 import { PlayerId } from "../game/types/game";
 import { clearAllPlayerUnits, draggedUnit, onInitialStateChange, setDraggedUnit, isDragging, store, units } from "../store/store";
 import { playerUnits } from "../game/game";
-import { Unit, UnitBase, UnitType, unitTypes } from "../game/types/unit";
+import { Unit, UnitBase, UnitType, unitTypes } from "../game/unit";
 import { UnitBases } from "../game/data/unit-bases";
 
 const EditUnitView = (props: { unit: Unit; onChange: (unit: Unit, newType: UnitType) => void; onMouseUp: (unit: Unit) => void }) => {

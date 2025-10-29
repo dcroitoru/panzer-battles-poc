@@ -1,5 +1,4 @@
 import { For, Show } from "solid-js";
-import { PlayerId, replaySpeedList } from "../game/types/game";
 // import {
 //   enableSounds,
 //   events,
@@ -15,11 +14,10 @@ import { PlayerId, replaySpeedList } from "../game/types/game";
 //   tickDelta,
 //   units,
 // } from "../store/store";
-import { Passive, Unit, unitTypes } from "../game/types/unit";
-import { playerUnits } from "../game/game";
-import { printHtmlEvent } from "../game/printEvents";
-import { StatusKind } from "../game/types/ability";
-import { MainBoardState, MainBoardUnits } from "../game/types/round";
+import { Unit } from "../game/unit";
+import { MainBoardUnits } from "../game/types/round";
+import { Passive } from "../game/passives";
+import { StatusKind } from "../game/ability";
 
 // export const ReplaySpeed = () => (
 //   <div class="flex flex-row gap-4">
@@ -216,6 +214,14 @@ export const PlayerBoard = (props: { units: MainBoardUnits; isEnemy?: boolean })
         <For each={props.units[1]}>{(u) => <UnitView unit={u}></UnitView>}</For>
         <div>Support</div>
       </div>
+    </div>
+  );
+};
+
+export const UnitInPlayView = (props: { unit: Unit }) => {
+  return (
+    <div>
+      Unit: {props.unit.base.type}, cooldown: {props.unit.cooldown}
     </div>
   );
 };

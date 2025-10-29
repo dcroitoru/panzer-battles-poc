@@ -1,19 +1,9 @@
-import { Ability, StatusMap, StatusType } from "./ability";
+import { UnitBases } from "./data/unit-bases";
+import { Passive } from "./passives";
 import { PlayerId } from "./game";
-import { UnitBases } from "../data/unit-bases";
-import { PlayerType } from "./round";
+import { Ability, StatusMap, StatusType } from "./ability";
 
 export type Position = { x: number; y: number };
-
-export type PassiveKind = "buff" | "debuff" | "other";
-export type PassiveType = "armor" | "armor-pen" | "multistrike" | "blitz" | "exposed" | "exalted" | "ammo";
-export type Passive = {
-  type: PassiveType;
-  kind: PassiveKind;
-  value?: number;
-  consumable?: boolean;
-  mod?: "attack" | "defense";
-};
 
 export type Rarity = 0 | 1 | 2 | 3 | 4;
 
@@ -43,6 +33,7 @@ export type UnitBase = {
   //   tags: Tag[];
   passives?: Passive[];
   abilities?: Ability[];
+  ammo?: number;
 };
 
 export type UnitVO = {
@@ -57,11 +48,11 @@ export type Unit = UnitVO & {
   hp: number;
   cooldown: number;
   alive: boolean;
-  // status: Set<Status>;
   position: { x: number; y: number };
   passives: Passive[];
   status: StatusMap;
-  ammo?: number;
+  ammo: number;
+  useAmmo: boolean;
 };
 
 let internalId = 0;
@@ -71,8 +62,8 @@ export const createUnitVO = (type: UnitType): UnitVO => ({ id: createUnitId(), t
 export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, position: Position): Unit => {
   const base = UnitBases[type];
   const alive = type === "noUnit" ? false : true;
-  const passives = base.passives || [];
-  const ammo = passives.find((p) => p.type === "ammo")?.value;
+  const ammo = base.ammo ?? 0;
+  const useAmmo = base.ammo !== undefined;
   return {
     id,
     type,
@@ -86,5 +77,9 @@ export const createUnit = (id: UnitId, type: UnitType, ownerId: PlayerId, positi
     passives: base.passives || [],
     status: new Map<StatusType, number>(),
     ammo,
+    useAmmo,
   };
 };
+
+export const alive = (unit: Unit) => unit.alive;
+export const blitz = (unit: Unit) => unit.passives.find((p) => p.type === "blitz");

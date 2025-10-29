@@ -1,5 +1,5 @@
 import { GameState } from "./types/game";
-import { Position, Unit } from "./types/unit";
+import { Position, Unit } from "./unit";
 
 export const pickRandom = <T>(arr: T[]): T | undefined => {
   if (arr.length === 0) return undefined;

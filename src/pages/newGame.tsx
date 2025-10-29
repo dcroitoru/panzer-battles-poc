@@ -1,6 +1,6 @@
 import { createSignal, For, onCleanup, Show } from "solid-js";
 import { BoardItem, MainBoardState, PlayerBoardState, RoundState, SideBoardState } from "../game/types/round";
-import { UnitBase, UnitType } from "../game/types/unit";
+import { UnitBase, UnitType } from "../game/unit";
 import { UnitBases } from "../game/data/unit-bases";
 import { getShopTierForRound, rollShopForRound } from "../game/new-game";
 import { Pos } from "./edit";
@@ -237,7 +237,7 @@ export const NewGame = () => {
         <div class="flex flex-row gap-2 bg-amber-200">
           <For each={rounds}>
             {(round) => (
-              <div>
+              <div class="p-2">
                 <Show when={round === state().round}>
                   <div class="font-bold underline">round {(round + 1).toString()}</div>
                 </Show>
@@ -249,7 +249,7 @@ export const NewGame = () => {
           </For>
         </div>
 
-        <div class="flex flex-row gap-4 bg-amber-100">
+        <div class="flex flex-row gap-4 bg-amber-100 p-2">
           <div classList={{ selected: state().event === "shop" }}>Shop</div>
           <div classList={{ selected: state().event === "battle" }}>Battle</div>
         </div>
