@@ -32,7 +32,7 @@ const PlayerBoard = (props: { units: Unit[]; owner: PlayerId; winner: boolean })
 const tickDelta = 25;
 const maxTicks = 300;
 
-export const PlayBattle = (props: { playerBord: MainBoardState; enemyBoard: MainBoardState; onNext: () => void }) => {
+export const PlayBattle = (props: { playerBord: MainBoardState; enemyBoard: MainBoardState; onNext: (outcome: Outcome) => void }) => {
   const initialState: GameState = createInitialGameState(props.playerBord, props.enemyBoard);
   // const [gameState, setGameState] = createStore<GameState>(initialState);
   const [gameState, setGameState] = createSignal<GameState>(initialState);
@@ -55,7 +55,7 @@ export const PlayBattle = (props: { playerBord: MainBoardState; enemyBoard: Main
   };
 
   const startBattle = () => {
-    intervalId = setInterval(processNextTick, 5000 / tickDelta);
+    intervalId = setInterval(processNextTick, 1000 / tickDelta);
   };
 
   return (
@@ -67,7 +67,7 @@ export const PlayBattle = (props: { playerBord: MainBoardState; enemyBoard: Main
           start
         </button>
 
-        <button class="btn-primary" disabled={gameState().playState != "ended"} onClick={props.onNext}>
+        <button class="btn-primary" disabled={gameState().playState != "ended"} onClick={() => props.onNext(gameState().outcome)}>
           next
         </button>
       </div>

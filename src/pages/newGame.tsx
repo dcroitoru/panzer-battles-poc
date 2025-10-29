@@ -8,12 +8,14 @@ import { runWithOwner, getOwner } from "solid-js";
 import { createStore } from "solid-js/store";
 import { PlayBattle } from "../components/play-battle";
 import { getEnemyBoardStateForRound } from "../game/data/enemy-board-data";
+import { Outcome } from "../game/game";
 
 type MetaState = "not-started" | "started" | "ended";
 
 const startingFame = 5;
 const maxRounds = 10;
 const [metaState, setMetaState] = createSignal<MetaState>("not-started");
+const [outcome, setOutcome] = createSignal<Outcome>("no-outcome");
 const [fame, setFame] = createSignal(startingFame);
 const [state, setState] = createSignal<RoundState>({ round: 0, event: "shop" });
 const initialMainBoardState: MainBoardState = [
@@ -62,9 +64,10 @@ const startNewGame = () => {
   setMetaState("started");
 };
 
-const nextState = () => {
+const nextState = (outcome?: Outcome) => {
   if (state().round === maxRounds - 1 && state().event === "battle") {
     setMetaState("ended");
+    outcome && setOutcome(outcome);
     return;
   }
 
@@ -260,13 +263,26 @@ export const NewGame = () => {
         </Show>
 
         <Show when={state().event === "battle"}>
-          <PlayBattle playerBord={playerBoardState.main} enemyBoard={getEnemyBoardStateForRound(state().round)} onNext={() => nextState()}></PlayBattle>
+          <PlayBattle
+            playerBord={playerBoardState.main}
+            enemyBoard={getEnemyBoardStateForRound(state().round)}
+            onNext={(outcome) => nextState(outcome)}
+          ></PlayBattle>
           {/* <BattleScreen></BattleScreen> */}
         </Show>
       </Show>
 
       <Show when={metaState() === "ended"}>
         <p>Game ended!</p>
+        <p>TODO: Add outcome here</p>
+        <p>TODO: Add final player board here</p>
+        {/* <Show when={outcome() === "player-wins"}>
+          <h3 class="text-green-700">You won! 🎉🎉🎉</h3>
+        </Show>
+
+        <Show when={outcome() === "enemy-wins"}>
+          <h3 class="text-red-700">You lost! 💔💔💔</h3>
+        </Show> */}
         <EndGameButton />
       </Show>
 
