@@ -10,26 +10,50 @@ export type Rarity = 0 | 1 | 2 | 3 | 4;
 export type UnitId = number;
 
 export const unitTypes = [
+  // 0
   "noUnit",
-  "regulars",
   "conscripts",
+
+  // 1
+  "regulars",
   "lightTank",
   "mediumTank",
-  "heavyTank",
   "mobileAntitank",
   "fieldMedics",
   "snipers",
   "guards",
+  "assaultCommand",
+
+  // 2
+  "heavyTank",
+  "supportAntitank",
+  "FLAKGun",
+  "highPrecisionArtilery",
+  "napalmAntitank",
+  "wespe",
+
+  // 3
+  "tempoGun",
+  "artilleryCommand",
+  "customTank",
+  "henkel",
+
+  // 4
+  "eliteEngineers",
+  "kingTiger",
+  "firingElite",
+  "highCommand",
 ] as const;
 
 export type UnitType = (typeof unitTypes)[number];
 
 export type UnitBase = {
   type: UnitType;
+  rarity: Rarity;
   attack: number;
   cooldown: number;
   hp: number;
-  rarity: Rarity;
+  cost: number;
   //   tags: Tag[];
   passives?: Passive[];
   abilities?: Ability[];
