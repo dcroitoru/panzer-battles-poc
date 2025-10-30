@@ -1,3 +1,10 @@
+.unit {
+  background-image: url("assets/icons/tank.png");
+}
+.noUnit {
+  background-image: initial;
+}
+
 .lightTank {
   background-image: url("assets/icons/lightTank.jpg");
 }

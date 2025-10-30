@@ -206,3 +206,11 @@ export const UnitBases: Record<UnitType, UnitBase> = UnitBasesData.reduce((acc, 
   acc[cur.type] = cur;
   return acc;
 }, {} as Record<UnitType, UnitBase>);
+
+export const UnitBasesByRarity = {
+  0: Object.values(UnitBases).filter((b) => b.rarity == 0),
+  1: Object.values(UnitBases).filter((b) => b.rarity == 1),
+  2: Object.values(UnitBases).filter((b) => b.rarity == 2),
+  3: Object.values(UnitBases).filter((b) => b.rarity == 3),
+  4: Object.values(UnitBases).filter((b) => b.rarity == 4),
+};
